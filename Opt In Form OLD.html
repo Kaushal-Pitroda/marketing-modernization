@@ -1,0 +1,702 @@
+<!--%%[
+set @incomingFirstName = propercase(queryparameter('fname'))
+set @incomingLastName = propercase(queryparameter('lname'))
+set @incomingEmail = propercase(queryparameter('email'))
+]%%-->
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:article="http://ogp.me/ns/article#" xmlns:book="http://ogp.me/ns/book#" xmlns:product="http://ogp.me/ns/product#" xmlns:profile="http://ogp.me/ns/profile#" xmlns:video="http://ogp.me/ns/video#" prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# ">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="title" content="Enterprise Community Partners" />
+  <meta property="og:site_name" content="Enterprise Community Partners" />
+  <meta name="description" content="Enterprise’s mission is to create opportunity for low- and moderate-income people through affordable housing in diverse, thriving communities." />
+  <meta name="abstract" content="Enterprise’s mission is to create opportunity for low- and moderate-income people through affordable housing in diverse, thriving communities." />
+  <meta name="referrer" content="origin-when-cross-origin" />
+  <meta property="og:image" content="https://www.enterprisecommunity.org/sites/all/files/Enterprise_Community_Partners.png" />
+  <meta name="MobileOptimized" content="width" />
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="https://www.enterprisecommunity.org/sites/default/files/favicon.ico" type="image/vnd.microsoft.icon" />
+  <title>Enterprise Community Partners</title>
+  <link rel="stylesheet" href="http://cloud.info.enterprisecommunity.org/ecp-sfmc-css1" media="all" />
+  <link rel="stylesheet" href="http://cloud.info.enterprisecommunity.org/ecp-sfmc-css2" media="all" />
+  <link rel="stylesheet" href="http://cloud.info.enterprisecommunity.org/ecp-sfmc-css4" media="all">
+
+  <!--[if lte IE 8]>
+<script src="https://www.enterprisecommunity.org/core/assets/vendor/html5shiv/html5shiv.min.js?v=3.7.3"></script>
+<![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+   
+  $("#prefForm").submit(function(e) {
+ $('#emailInput').removeClass('required-field');
+   $('#emailError').removeClass('show').addClass('hide');
+   var isValid = true
+    
+ /* validate email on submit */  
+ var em = $("#emailInput").val(); 
+  var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+   if (!(re.test(em))) {
+    $('#emailError').removeClass('hide').addClass('show');
+    $('#emailInput').addClass('required-field');
+    $('#emailInput').focus();
+    console.log("bad email");
+    console.log(em);
+    isValid = false;
+   }
+  
+  if (isValid == false) 
+  e.preventDefault();  
+
+   /* alert if no subscriptions are checked */
+   if ($('.option:checked').length == 0) {
+        alert("Please check at least one subscription");
+        e.preventDefault();
+        }
+   
+  });    
+
+/* uncheck all options if unsubscribe all is clicked */
+  $('input#Unsubscribed').on('change', function() {
+    $('input.option').not(this).prop('checked', false);  
+    
+  });
+  /* uncheck the unsubscribe all checkbox if any subscription is checked */  
+  $('input.option').on('change', function() {
+    $('input#Unsubscribed').not(this).prop('checked', false);   
+
+  });
+/* reset button -not for production */
+  $('#resetBtn').click(function() {
+     $('input.option').prop('checked', false);  
+     $('input#Unsubscribed').prop('checked', false);  
+
+  });
+
+ /* select all subscription checkboxes if subscribe to all is checked */
+ $('#selectAll').click (function () {
+     var checkedStatus = this.checked;
+    $('.sublist-option').find('.option:checkbox').each(function () {
+        $(this).prop('checked', checkedStatus);
+     });
+  
+});
+
+
+ 
+  }); 
+  /* validate email on change */
+ function validatetheEmail(z) {
+ $('#emailError').removeClass('show').addClass('hide');
+ $('#emailInput').removeClass('required-field');
+ var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  if (!(re.test(z.value))) {
+   $('#emailError').removeClass('hide').addClass('show');
+   $('#emailInput').addClass('required-field');
+    console.log("bad email");
+   z.focus();
+  }
+ } 
+  </script>
+  <script type="text/javascript">var switchTo5x=true;</script>
+  </head>
+  <body class="branding-ecp sidebar-active hero-full path-node page-node-type-page">
+<a href="#main-content" class="visually-hidden focusable skip-link"> Skip to main content </a>
+<div class="layout-container">
+ <header role="banner">
+  <div class="container">
+   <div id="logo"> <a href="https://www.enterprisecommunity.org/" title="Home" rel="home"> <img src="https://www.enterprisecommunity.org/sites/default/files/logo.png" alt="Home"/> </a> </div>
+   <div class="region region-header">
+    <nav role="navigation" aria-labelledby="block-mainnavigation-menu" id="block-mainnavigation" class="block block-menu navigation menu--main" style="right:0px !important;">
+     <h2 class="visually-hidden" id="block-mainnavigation-menu">Main navigation</h2>
+     <ul class="menu">
+      <li class="menu-item menu-item--expanded menu-item--active-trail first about"> <a href="https://www.enterprisecommunity.org/about" data-drupal-link-system-path="node/3027" class="is-active">About</a>
+       <ul class="submenu">
+        <li class="menu-item menu-item--collapsed first what-we-do"> <a href="https://www.enterprisecommunity.org/about/what-we-do" data-drupal-link-system-path="node/3329">What We Do</a> </li>
+        <li class="menu-item menu-item--collapsed leadership-structure"> <a href="https://www.enterprisecommunity.org/about/leadership-and-structure" data-drupal-link-system-path="node/3033">Leadership &amp; Structure</a> </li>
+        <li class="menu-item annual-report"> <a href="https://www.enterprisecommunity.org/about/results-and-financials/annual-report" data-drupal-link-system-path="node/3074">Annual Report</a> </li>
+        <li class="menu-item investor-report"> <a href="https://www.enterprisecommunity.org/about/results-and-financials/investor-report" data-drupal-link-system-path="node/3291">Investor Report</a> </li>
+        <li class="menu-item menu-item--collapsed results-financials"> <a href="https://www.enterprisecommunity.org/about/results-and-financials" data-drupal-link-system-path="node/3041">Results &amp; Financials</a> </li>
+        <li class="menu-item contact-us"> <a href="https://www.enterprisecommunity.org/about/contact-us" data-drupal-link-system-path="node/2957">Contact Us</a> </li>
+        <li class="menu-item menu-item--collapsed last support-our-work"> <a href="https://www.enterprisecommunity.org/about/support-our-work" data-drupal-link-system-path="node/3159">Support Our Work</a> </li>
+       </ul>
+      </li>
+      <li class="menu-item donate"> <a href="https://donatenow.networkforgood.org/1443287">Donate</a> </li>
+      <li class="menu-item menu-item--expanded invest"> <a href="https://www.enterprisecommunity.org/invest" data-drupal-link-system-path="node/3283">Invest</a>
+       <ul class="submenu">
+        <li class="menu-item first impact-note"> <a href="https://www.enterprisecommunity.org/invest/impact-note" data-drupal-link-system-path="node/3122">Impact Note</a> </li>
+        <li class="menu-item last our-region,-your-investment"> <a href="https://www.enterprisecommunity.org/invest/impact-note/our-region-your-investment" data-drupal-link-system-path="node/3300">Our Region, Your Investment</a> </li>
+       </ul>
+      </li>
+      <li class="menu-item menu-item--collapsed news-events"> <a href="https://www.enterprisecommunity.org/news-and-events" data-drupal-link-system-path="node/2970">News &amp; Events</a> </li>
+      <li class="menu-item menu-item--expanded last careers"> <a href="https://www.enterprisecommunity.org/careers" data-drupal-link-system-path="node/2936">Careers</a>
+       <ul class="submenu">
+        <li class="menu-item first last benefits"> <a href="https://www.enterprisecommunity.org/careers/benefits" data-drupal-link-system-path="node/3177">Benefits</a> </li>
+       </ul>
+      </li>
+     </ul>
+    </nav>
+    <div id="block-mobilenavicon" class="block block-block-content block-block-contentd4f6c683-5b1b-482d-8d98-762b5ccbf7ee">
+     <div class="text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+      <button class="mobile-nav-icon"><i class="fa fa-navicon"></i></button>
+     </div>
+    </div>
+   </div>
+  </div>
+ </header>
+ <div class="navigation">
+  <div class="container">
+   <div class="region region-navigation">
+    <div id="block-mainmenu-2" class="block block-superfish block-superfishtop-menu">
+     <ul id="superfish-top-menu" class="menu sf-menu sf-top-menu sf-horizontal sf-style-none">
+      <li id="top-menu-menu-link-contentc3ba18df-e160-426a-971e-79627862d930" class="sf-depth-1 menuparent node-3127"><a href="https://www.enterprisecommunity.org/financing-and-development" class="sf-depth-1 menuparent">Financing &amp; Development</a>
+       <ul class="sf-multicolumn">
+        <li class="sf-multicolumn-wrapper sf-depth-1 menuparent node-3127">
+         <ol>
+          <li id="top-menu-menu-link-contentfe2a5f39-5dac-4782-be41-8ce37cadfedb" class="sf-depth-2 sf-multicolumn-column menuparent ">
+           <div class="sf-multicolumn-column"><a href="" class="sf-depth-2 menuparent">Enterprise Community Investment</a>
+            <ol>
+             <li id="top-menu-menu-link-content8f4f0920-e67d-453d-a7a3-4f3636aae77d" class="sf-depth-3 menuparent node-3293"><a href="https://www.enterprisecommunity.org/financing-and-development/asset-management" class="sf-depth-3 menuparent">Asset Management</a>
+              <ul>
+               <li id="top-menu-menu-link-contentb69bc1ff-d71e-4c8a-b718-318bc518dd95" class="sf-depth-4 sf-no-children node-2889"><a href="https://www.enterprisecommunity.org/financing-and-development/asset-management/construction-and-lease-up" class="sf-depth-4">Construction &amp; Lease-Up</a></li>
+               <li id="top-menu-menu-link-contente4c60700-ad61-4d00-8aa1-8a5832bd5418" class="sf-depth-4 sf-no-children node-3215"><a href="https://www.enterprisecommunity.org/financing-and-development/asset-management/property-reporting-and-compliance" class="sf-depth-4">Property Reporting &amp; Compliance</a></li>
+               <li id="top-menu-menu-link-contentf0d2f324-5617-4e08-9118-8a607ec935d4" class="sf-depth-4 sf-no-children node-3024"><a href="https://www.enterprisecommunity.org/financing-and-development/asset-management/year-15-dispositions" class="sf-depth-4">Year 15 Dispositions</a></li>
+              </ul>
+             </li>
+             <li id="top-menu-menu-link-content3d948aeb-3840-446d-9d17-3e27936eedeb" class="sf-depth-3 sf-no-children node-2998"><a href="https://www.enterprisecommunity.org/financing-and-development/conventional-equity" title="Conventional Equity for Affordable &amp; Workforce Housing" class="sf-depth-3">Conventional Equity</a></li>
+             <li id="top-menu-menu-link-content32a8a952-b108-4fe6-941f-5a9fcc5ce530" class="sf-depth-3 menuparent node-3310"><a href="https://www.enterprisecommunity.org/financing-and-development/development-and-consulting" class="sf-depth-3 menuparent">Development &amp; Consulting</a>
+              <ul>
+               <li id="top-menu-menu-link-content211a585f-30cf-43b4-8bf6-6a7899afeed7" class="sf-depth-4 sf-no-children node-5788"><a href="https://www.enterprisecommunity.org/financing-and-development/development-and-consulting/portfolio-and-approach" class="sf-depth-4">Portfolio</a></li>
+               <li id="top-menu-menu-link-content891811af-8121-47ad-9616-18f7fe6d136c" class="sf-depth-4 sf-no-children node-2973"><a href="https://www.enterprisecommunity.org/financing-and-development/development-and-consulting/properties-available" class="sf-depth-4">Properties Available</a></li>
+              </ul>
+             </li>
+             <li id="top-menu-menu-link-contentb5d57165-8f16-4d0d-a37c-bf8495a64ac0" class="sf-depth-3 menuparent node-2864"><a href="https://www.enterprisecommunity.org/financing-and-development/low-income-housing-tax-credits" class="sf-depth-3 menuparent">Low-Income Housing Tax Credits</a>
+              <ul>
+               <li id="top-menu-menu-link-content9394f365-668e-44df-b219-0acdaaa1c6a7" class="sf-depth-4 sf-no-children node-2849"><a href="https://www.enterprisecommunity.org/financing-and-development/low-income-housing-tax-credits/investment-impact" class="sf-depth-4">Investment Impact</a></li>
+               <li id="top-menu-menu-link-content164021bc-b5c0-4cde-a2bd-c8b8aa6c2202" class="sf-depth-4 sf-no-children node-3343"><a href="https://www.enterprisecommunity.org/financing-and-development/low-income-housing-tax-credits/portfolio-and-approach" class="sf-depth-4">Portfolio &amp; Approach</a></li>
+               <li id="top-menu-menu-link-content51d8b4e5-9eab-41f7-a900-2d126d926801" class="sf-depth-4 sf-no-children node-3013"><a href="https://www.enterprisecommunity.org/financing-and-development/low-income-housing-tax-credits/syndicator-map" class="sf-depth-4">Locate an Originator</a></li>
+              </ul>
+             </li>
+             <li id="top-menu-menu-link-contentcc5104c8-8002-411b-ad43-53c2e4ee5eba" class="sf-depth-3 sf-no-children node-2848"><a href="https://www.enterprisecommunity.org/financing-and-development/multifamily-and-commercial-real-estate" class="sf-depth-3">Multifamily &amp; Commercial Real Estate</a></li>
+             <li id="top-menu-menu-link-content98f9095e-91d9-458a-8a65-b3ee6c9394e6" class="sf-depth-3 menuparent node-3294"><a href="https://www.enterprisecommunity.org/financing-and-development/new-markets-tax-credits" class="sf-depth-3 menuparent">New Markets Tax Credits</a>
+              <ul>
+               <li id="top-menu-menu-link-content0ea4c114-6d5c-4897-9101-24f60efd166e" class="sf-depth-4 sf-no-children node-2945"><a href="https://www.enterprisecommunity.org/financing-and-development/new-markets-tax-credits/consulting" class="sf-depth-4">Consulting</a></li>
+               <li id="top-menu-menu-link-contentad5dc0cd-6d68-43dc-89dd-aabb8992eb46" class="sf-depth-4 sf-no-children node-3012"><a href="https://www.enterprisecommunity.org/financing-and-development/new-markets-tax-credits/portfolio-and-approach" class="sf-depth-4">Portfolio &amp; Approach</a></li>
+              </ul>
+             </li>
+            </ol>
+           </div>
+          </li>
+          <li id="top-menu-menu-link-contentc1da18eb-a01c-41fe-a594-0ee77d31e95d" class="sf-depth-2 sf-multicolumn-column menuparent ">
+           <div class="sf-multicolumn-column"><a href="" class="sf-depth-2 menuparent">Enterprise Community Partners</a>
+            <ol>
+             <li id="top-menu-menu-link-content7f0f711c-c00b-4cda-abf8-5e5a5a6b8ae2" class="sf-depth-3 menuparent node-3150"><a href="https://www.enterprisecommunity.org/financing-and-development/community-loan-fund" class="sf-depth-3 menuparent">Community Loan Fund</a>
+              <ul>
+               <li id="top-menu-menu-link-content3ac26188-6e48-49d4-acc0-d219cf7f7c96" class="sf-depth-4 sf-no-children node-3070"><a href="https://www.enterprisecommunity.org/financing-and-development/community-loan-fund/products" class="sf-depth-4">Loan Fund Products</a></li>
+               <li id="top-menu-menu-link-content9c2d4d41-d883-42fb-a01c-97e99de9d1a5" class="sf-depth-4 sf-no-children node-2906"><a href="https://www.enterprisecommunity.org/financing-and-development/community-loan-fund/support-our-work" class="sf-depth-4">Support Our Work</a></li>
+              </ul>
+             </li>
+             <li id="top-menu-menu-link-content627433b7-021a-489a-9560-1dd1e7839640" class="sf-depth-3 sf-no-children node-3228"><a href="https://www.enterprisecommunity.org/financing-and-development/grants" class="sf-depth-3">Grants</a></li>
+            </ol>
+           </div>
+          </li>
+         </ol>
+        </li>
+       </ul>
+      </li>
+      <li id="top-menu-menu-link-content0fb48b97-b1e7-41b3-820b-647cdc6f59f8" class="sf-depth-1 menuparent node-2962"><a href="https://www.enterprisecommunity.org/solutions-and-innovation" class="sf-depth-1 menuparent">Solutions &amp; Innovation</a>
+       <ul class="sf-multicolumn">
+        <li class="sf-multicolumn-wrapper sf-depth-1 menuparent node-2962">
+         <ol>
+          <li id="top-menu-menu-link-contentcb998719-34b2-403a-95d0-a21aee08e730" class="sf-depth-2 sf-multicolumn-column menuparent ">
+           <div class="sf-multicolumn-column"><a href="" class="sf-depth-2 menuparent">Enterprise Community Partners</a>
+            <ol>
+             <li id="top-menu-menu-link-contentdd49223d-b0e9-4a7c-be23-e67ee05ad0fa" class="sf-depth-3 sf-no-children node-3098"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/building-sustainable-organizations" class="sf-depth-3">Building Sustainable Organizations</a></li>
+             <li id="top-menu-menu-link-contentf195c964-aa54-41ed-a47f-0dd78ca208e3" class="sf-depth-3 sf-no-children node-3331"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/culture-and-creativity" class="sf-depth-3">Culture &amp; Creativity</a></li>
+             <li id="top-menu-menu-link-contentc95fda22-6b4f-4cb5-bdf1-6043dabdebf0" class="sf-depth-3 sf-no-children node-3335"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/design-leadership" class="sf-depth-3">Design Leadership</a></li>
+             <li id="top-menu-menu-link-contentdc7fedee-e83c-4e69-803b-343e0043e74a" class="sf-depth-3 sf-no-children node-2999"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/equitable-transit-oriented-development" class="sf-depth-3">Equitable Transit-Oriented Development</a></li>
+             <li id="top-menu-menu-link-contentb12d0f0f-9d65-48a9-97b6-f1620cc73279" class="sf-depth-3 menuparent node-3037"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/green-communities" class="sf-depth-3 menuparent">Green Communities</a>
+              <ul>
+               <li id="top-menu-menu-link-contentfe0e0785-aaa3-4c3b-8ec5-649af475a645" class="sf-depth-4 sf-no-children node-3306"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/green-communities/criteria-and-certification" class="sf-depth-4">Criteria &amp; Certification</a></li>
+              </ul>
+             </li>
+             <li id="top-menu-menu-link-content6ab7626f-eeb6-46eb-b522-2b3d61c12f01" class="sf-depth-3 sf-no-children node-2874"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/health-and-housing" class="sf-depth-3">Health &amp; Housing</a></li>
+             <li id="top-menu-menu-link-contentd8366dc1-2a65-46ce-be3f-37822351a207" class="sf-depth-3 sf-no-children node-3285"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/pay-for-success" class="sf-depth-3">Pay for Success</a></li>
+             <li id="top-menu-menu-link-content2a196fa8-ba11-4f28-8ab4-504e6aaa4b20" class="sf-depth-3 sf-no-children node-3134"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/technical-assistance-and-consulting" class="sf-depth-3">Public Sector Consulting &amp; Technical Assistance</a></li>
+             <li id="top-menu-menu-link-content35af8154-7fbb-4e2c-8381-795e1a8438f2" class="sf-depth-3 sf-no-children taxonomy-term-165"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/disaster-recovery-and-rebuilding" class="sf-depth-3">Recovery &amp; Rebuilding</a></li>
+             <li id="top-menu-menu-link-content1bd50c5d-9a91-4cf4-a34e-7d604420b3a3" class="sf-depth-3 sf-no-children node-3034"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/design-leadership/rose-architectural-fellowship" class="sf-depth-3">Rose Architectural Fellowship</a></li>
+             <li id="top-menu-menu-link-content7a816b5a-ad76-407e-8f3e-885ced94e539" class="sf-depth-3 sf-no-children node-2855"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/rural-and-native-american-housing" class="sf-depth-3">Rural &amp; Native American Housing</a></li>
+             <li id="top-menu-menu-link-contenta51b9bd9-be79-4511-b83c-0d883f4282d0" class="sf-depth-3 sf-no-children node-3069"><a href="https://www.enterprisecommunity.org/solutions-and-innovation/tools" class="sf-depth-3">Tools</a></li>
+            </ol>
+           </div>
+          </li>
+         </ol>
+        </li>
+       </ul>
+      </li>
+      <li id="top-menu-menu-link-contentf0b213bd-0fa7-48c7-877f-3692ab094cb1" class="sf-depth-1 menuparent node-3102"><a href="https://www.enterprisecommunity.org/policy-and-advocacy" class="sf-depth-1 menuparent">Policy &amp; Advocacy</a>
+       <ul class="sf-multicolumn">
+        <li class="sf-multicolumn-wrapper sf-depth-1 menuparent node-3102">
+         <ol>
+          <li id="top-menu-menu-link-content39b4784e-86df-4642-8aa2-6d2fd7738175" class="sf-depth-2 sf-multicolumn-column menuparent ">
+           <div class="sf-multicolumn-column"><a href="" class="sf-depth-2 menuparent">Enterprise Community Partners</a>
+            <ol>
+             <li id="top-menu-menu-link-content080363dd-21e2-4106-9742-415cd02da2ec" class="sf-depth-3 sf-no-children node-3200"><a href="https://www.enterprisecommunity.org/policy-and-advocacy/campaigns-and-coalitions" class="sf-depth-3">Campaigns &amp; Coalitions</a></li>
+             <li id="top-menu-menu-link-content17080e17-57b7-44b2-b4b0-a104bb05aeda" class="sf-depth-3 sf-no-children node-3032"><a href="https://www.enterprisecommunity.org/policy-and-advocacy/policy-development-and-research" class="sf-depth-3">Policy Development &amp; Research</a></li>
+             <li id="top-menu-menu-link-content89bbcdb0-b625-4368-b2f2-8a301e1fbb4d" class="sf-depth-3 sf-no-children node-3296"><a href="https://www.enterprisecommunity.org/policy-and-advocacy/policy-priorities" class="sf-depth-3">Policy Priorities</a></li>
+             <li id="top-menu-menu-link-content7822fbb4-6118-4179-aaf1-48a87e48e85c" class="sf-depth-3 sf-no-children node-3198"><a href="https://www.enterprisecommunity.org/policy-and-advocacy/state-and-local-policy" class="sf-depth-3">State &amp; Local Policy</a></li>
+             <li id="top-menu-menu-link-content3edf996c-876f-4723-9b81-e5c63baa69f8" class="sf-depth-3 sf-no-children node-2846"><a href="https://www.enterprisecommunity.org/policy-and-advocacy/testimony-and-public-comment" class="sf-depth-3">Testimony &amp; Public Comment</a></li>
+            </ol>
+           </div>
+          </li>
+         </ol>
+        </li>
+       </ul>
+      </li>
+      <li id="top-menu-menu-link-contentdfc08c22-419e-48e2-a15b-02d4752ec514" class="sf-depth-1 menuparent node-3309"><a href="https://www.enterprisecommunity.org/research-and-resources" class="sf-depth-1 menuparent">Research &amp; Resources</a>
+       <ul class="sf-multicolumn">
+        <li class="sf-multicolumn-wrapper sf-depth-1 menuparent node-3309">
+         <ol>
+          <li id="top-menu-menu-link-contented8c3d38-377e-448f-8e05-251d074968b8" class="sf-depth-2 sf-multicolumn-column menuparent ">
+           <div class="sf-multicolumn-column"><a href="" class="sf-depth-2 menuparent">Enterprise Community Partners</a>
+            <ol>
+             <li id="top-menu-menu-link-content53735baa-7da5-448d-a5da-c2f2e57bcc34" class="sf-depth-3 sf-no-children node-6156"><a href="https://www.enterprisecommunity.org/research-and-resources/building-blocks-podcast" class="sf-depth-3">Building Blocks Podcast</a></li>
+             <li id="top-menu-menu-link-content330a1179-9880-4ac5-96f0-328fbdd90432" class="sf-depth-3 sf-no-children "><a href="http://www.housinginsecurity.org/" title="Housing Insecurity Dashboard" class="sf-depth-3 sf-external">Housing Insecurity Dashboard</a></li>
+             <li id="top-menu-menu-link-contente323be00-29a9-424a-a1fb-42ad6e397b1b" class="sf-depth-3 sf-no-children node-2913"><a href="https://www.enterprisecommunity.org/research-and-resources/live-online-events" class="sf-depth-3">Live Online Events</a></li>
+             <li id="top-menu-menu-link-content47038e7e-5031-4131-82ca-1c21b1e2e6e6" class="sf-depth-3 sf-no-children taxonomy-term-52"><a href="https://www.enterprisecommunity.org/opportunity360" class="sf-depth-3">Opportunity360</a></li>
+             <li id="top-menu-menu-link-content7978d622-26ac-4259-a4e3-b7c98386a76b" class="sf-depth-3 sf-no-children resources"><a href="https://www.enterprisecommunity.org/resources" title="Enterprise Resource Center" class="sf-depth-3">Resource Center</a></li>
+            </ol>
+           </div>
+          </li>
+         </ol>
+        </li>
+       </ul>
+      </li>
+      <li id="top-menu-menu-link-content8f88c6af-2987-4663-8fe0-41652fc155e7" class="sf-depth-1 menuparent where-we-work"><a href="https://www.enterprisecommunity.org/where-we-work" class="sf-depth-1 menuparent">Where We Work</a>
+       <ul class="sf-multicolumn">
+        <li class="sf-multicolumn-wrapper sf-depth-1 menuparent where-we-work">
+         <ol>
+          <li id="top-menu-menu-link-contentaacde8c1-807a-42ac-990c-90252e97d5e7" class="sf-depth-2 sf-multicolumn-column menuparent ">
+           <div class="sf-multicolumn-column"><a href="" class="sf-depth-2 menuparent">Enterprise Community Partners</a>
+            <ol>
+             <li id="top-menu-menu-link-content809f9f40-1963-4f55-8858-3c731cbbd72a" class="sf-depth-3 sf-no-children node-3018"><a href="https://www.enterprisecommunity.org/where-we-work/chicago" class="sf-depth-3">Chicago</a></li>
+             <li id="top-menu-menu-link-contente264722b-8fc4-44af-8f5d-e355dd6d5373" class="sf-depth-3 sf-no-children node-3016"><a href="https://www.enterprisecommunity.org/where-we-work/denver" class="sf-depth-3">Denver</a></li>
+             <li id="top-menu-menu-link-content3c48cd20-d1cf-41b2-8ee4-13316d799d11" class="sf-depth-3 sf-no-children node-3031"><a href="https://www.enterprisecommunity.org/where-we-work/detroit" class="sf-depth-3">Detroit</a></li>
+             <li id="top-menu-menu-link-content7b53d4e5-821b-4e10-9be0-901437a3189b" class="sf-depth-3 sf-no-children node-2847"><a href="https://www.enterprisecommunity.org/where-we-work/gulf-coast" class="sf-depth-3">Gulf Coast</a></li>
+             <li id="top-menu-menu-link-content8eb3e2cd-288d-48ff-b199-344a21802c84" class="sf-depth-3 sf-no-children node-2988"><a href="https://www.enterprisecommunity.org/where-we-work/mid-atlantic" class="sf-depth-3">Mid-Atlantic</a></li>
+             <li id="top-menu-menu-link-content363f6988-f9e2-4ac3-b031-800bed0630fd" class="sf-depth-3 sf-no-children node-3265"><a href="https://www.enterprisecommunity.org/where-we-work/new-york" class="sf-depth-3">New York</a></li>
+             <li id="top-menu-menu-link-contentaaf25f2e-14e2-4c17-8dba-2bf0a48a76b8" class="sf-depth-3 sf-no-children node-3247"><a href="https://www.enterprisecommunity.org/where-we-work/northern-california" class="sf-depth-3">Northern California</a></li>
+             <li id="top-menu-menu-link-content4dc761c9-5ab5-421e-a7c2-5e593cdb0ee6" class="sf-depth-3 sf-no-children node-5787"><a href="https://www.enterprisecommunity.org/where-we-work/ohio" class="sf-depth-3">Ohio</a></li>
+             <li id="top-menu-menu-link-content0e9d5a17-cc32-4751-beb2-63fd19b96c72" class="sf-depth-3 sf-no-children node-3360"><a href="https://www.enterprisecommunity.org/where-we-work/pacific-northwest" class="sf-depth-3">Pacific Northwest</a></li>
+             <li id="top-menu-menu-link-contenta1560047-e18f-4772-90f7-e98945cdd08b" class="sf-depth-3 sf-no-children node-2879"><a href="https://www.enterprisecommunity.org/where-we-work/southeast" class="sf-depth-3">Southeast</a></li>
+             <li id="top-menu-menu-link-contentac5bc0d8-944e-4bd6-8a1e-6bd7d8f28fe6" class="sf-depth-3 sf-no-children node-2908"><a href="https://www.enterprisecommunity.org/where-we-work/southern-california" class="sf-depth-3">Southern California</a></li>
+            </ol>
+           </div>
+          </li>
+         </ol>
+        </li>
+       </ul>
+      </li>
+      <li id="top-menu-menu-link-contentba787b0d-ea8b-49a4-8e0e-172f55199df3" class="sf-depth-1 sf-no-children blog"><a href="https://www.enterprisecommunity.org/blog" class="sf-depth-1">Blog</a></li>
+     </ul>
+    </div>
+   </div>
+  </div>
+ </div>
+ <div class="container">
+ <h1 style="text-align: center">
+  <center>
+   Subscribe to Enterprise News
+  </center>
+ </h1>
+ <form action="%%=cloudpagesURL(376)=%%" method="post" id="prefForm">
+  <fieldset>
+   <div class="sublist-option">
+    <table border="0" cellpadding="0" cellspacing="0" align="center">
+     <tr>
+      <td valign="top" ><label class="checkbox-label">&nbsp;
+        <input type="checkbox" id="selectAll">
+        <span class="checkmark"></span> </label></td>
+      <td valign="top" class="option-cell"><span class="option-header">Subscribe to All</span></td>
+     </tr>
+    </table>
+    <div style="font-size:10px; line-height: 10px;">&nbsp;</div>
+    <hr>
+    <div style="font-size:10px; line-height: 10px;">&nbsp;</div>
+   </div>
+   <div class="subscription-list">
+    <div class="form-column float-left">
+     <div class="sublist-option">
+      <div class="section-header">LOCAL</div>
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Chicago_News__c" id="Chicago_News__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Chicago News</span><br>
+         Stay up to date on our housing and community development work in Chicagoland and throughout the Midwest. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="News_from_Denver__c" id="News_from_Denver__c">
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">News from Denver</span><br>
+         Receive housing and transit-oriented development policy briefings, announcements for grants and events, and news from our partners throughout Colorado. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Mid_Atlantic_News__c" id="Mid_Atlantic_News__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Mid-Atlantic News</span><br>
+         A monthly report about the latest progress on building and preserving green, affordable housing in the Mid-Atlantic area. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Northern_California__c" id="Northern_California__c">
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Northern California News</span><br>
+         A bimonthly report about our work in transit-oriented development, green building, public housing and neighborhood revitalization in Northern California. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Ohio_Report__c" id="Ohio_Report__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Ohio Report</span><br>
+         Stay up to date on our housing and community development work in Cleveland, Columbus and throughout the state of Ohio. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Pacific_Northwest__c" id="Pacific_Northwest__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Pacific Northwest</span><br>
+         Quarterly updates on housing, policy, and solutions in Washington and Oregon including our Home & Hope, Health in Housing and transit-oriented development programs. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Southeast_News__c" id="Southeast_News__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Southeast News</span><br>
+         Periodic updates on the preservation of affordable housing and transit-oriented development in Alabama, Florida, Georgia, North Carolina, South Carolina and Tennessee. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Southern_California__c" id="Southern_California__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Southern California News</span><br>
+         A monthly report about our work in affordable housing, community development, green building and partner sustainability in Southern California.</td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="New_York_News__c" id="New_York_News__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">New York News</span><br>
+         Stay up to date on our housing and community development work in New York.</td>
+       </tr>
+      </table>
+     </div>
+    </div>
+    <div class="form-column float-left">
+     <!--<div class="sublist-option">
+      
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="eConnect__c" id="eConnect__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">eConnect</span><br>
+         A monthly round-up of news and events from Enterprise and its many partners nationwide. It's both crisp and chock full of news you can use. </td>
+       </tr>
+      </table>
+     </div>-->
+     <div class="sublist-option">
+      <div class="section-header">NATIONAL</div>
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="MKTO_All_Enterprise_News__c" id="MKTO_All_Enterprise_News__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">National News</span><br>
+         Periodic notices of breaking news and announcements from the family of Enterprise initiatives. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option section-padding">
+      <div class="section-header">POLICY</div>
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="MKTO_Capitol_Express__c" id="MKTO_Capitol_Express__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Capitol Express</span><br>
+         Issued twice a month, this is a summary of major congressional and regulatory activities affecting affordable housing and community development. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Community_Developments__c" id="Community_Developments__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Community Developments</span><br>
+         Subscribe to receive a daily roundup of news impacting housing and communities. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option section-padding">
+      <div class="section-header">TRAINING & RESOURCES</div>
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Opportunity360__c" id="Opportunity360__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Opportunity360 Insights</span><br>
+         Monthly feature providing the latest tools, data, resources, and case studies on how to build opportunity with communities. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Live_Online_Events__c" id="Live_Online_Events__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Live Online Events</span><br>
+         Our webinars series cover programmatic, skill-building and thought-provoking topics about housing and community development. </td>
+       </tr>
+      </table>
+     </div>
+     <div class="sublist-option section-padding">
+      <div class="section-header">FINANCE</div>
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td valign="top" ><label class="checkbox-label">&nbsp;
+          <input class="option" type="checkbox" name="Community_Returns__c" id="Community_Returns__c" >
+          <span class="checkmark"></span> </label></td>
+        <td valign="top" class="option-cell"><span class="option-header">Community Returns</span><br>
+         A periodic report on the local return on investment created by Enterprise.</td>
+       </tr>
+      </table>
+     </div>
+    </div>
+    
+   </div>
+   </div>
+   <div class="container">
+   <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+     <td bgcolor="#dde2e5" class="grey-container"><div style="font-size:12px; padding:0px 30px 0px 10px; text-align: right; font-weight: 300;">*required field</div>
+      <div class="form-column float-left">
+       <div class="form-input-box">
+        <label for="edit-first-name" >First Name</label>
+        <input type="text"  name="first_name" maxlength="128" placeholder="First Name" %%[if not empty(@incomingFirstName) == true then]%%value="%%=v(@incomingFirstName)=%%"%%[else endif]%%/>
+       </div>
+       <div class="form-input-box">
+        <label for="edit-first-name" >Last Name</label>
+        <input type="text"  name="last_name" maxlength="128" placeholder="Last Name" %%[if not empty(@incomingLastName) == true then]%%value="%%=v(@incomingLastName)=%%"%%[else endif]%%/>
+       </div>
+       <div class="form-input-box">
+        <label for="edit-first-name" >Company Name</label>
+        <input type="text" name="company_name" maxlength="128" placeholder="Company Name" />
+       </div>
+       <div class="hide" id="emailError" style="color:#FF0004; font-weight: bold;">Please input a valid email address</div>
+      </div>
+      <div class="form-column float-left">
+       <div class="form-input-box">
+        <label for="edit-first-name" >Email Address</label>
+        <input type="text" name="email_address" maxlength="254" id="emailInput" onchange="validatetheEmail(this);"  placeholder="Email Address *" %%[if not empty(@incomingEmail) == true then]%%value="%%=v(@incomingEmail)=%%"%%[else endif]%%/>
+       </div>
+       <div class="form-input-box-half float-left group">
+        <label for="edit-first-name" >City </label>
+        <input type="text"  name="city" maxlength="128" placeholder="City" />
+       </div>
+       <div class="form-input-box-state float-left group">
+        <label for="edit-first-name" >State </label>
+        <select id="state" name="state">
+         <option value="" hidden disabled selected>State</option>
+         <option value="AL">AL</option>
+         <option value="AK">AK</option>
+         <option value="AZ">AZ</option>
+         <option value="AR">AR</option>
+         <option value="CA">CA</option>
+         <option value="CO">CO</option>
+         <option value="CT">CT</option>
+         <option value="DE">DE</option>
+         <option value="FL">FL</option>
+         <option value="GA">GA</option>
+         <option value="HI">HI</option>
+         <option value="ID">ID</option>
+         <option value="IL">IL</option>
+         <option value="IN">IN</option>
+         <option value="IA">IA</option>
+         <option value="KS">KS</option>
+         <option value="KY">KY</option>
+         <option value="LA">LA</option>
+         <option value="ME">ME</option>
+         <option value="MD">MD</option>
+         <option value="MA">MA</option>
+         <option value="MI">MI</option>
+         <option value="MN">MN</option>
+         <option value="MS">MS</option>
+         <option value="MO">MO</option>
+         <option value="MT">MT</option>
+         <option value="NE">NE</option>
+         <option value="NV">NV</option>
+         <option value="NH">NH</option>
+         <option value="NJ">NJ</option>
+         <option value="NM">NM</option>
+         <option value="NY">NY</option>
+         <option value="NC">NC</option>
+         <option value="ND">ND</option>
+         <option value="OH">OH</option>
+         <option value="OK">OK</option>
+         <option value="OR">OR</option>
+         <option value="PA">PA</option>
+         <option value="RI">RI</option>
+         <option value="SC">SC</option>
+         <option value="SD">SD</option>
+         <option value="TN">TN</option>
+         <option value="TX">TX</option>
+         <option value="UT">UT</option>
+         <option value="VT">VT</option>
+         <option value="VA">VA</option>
+         <option value="WA">WA</option>
+         <option value="WV">WV</option>
+         <option value="WI">WI</option>
+         <option value="WY">WY</option>
+        </select>
+       </div>
+       <div class="form-input-box">
+        <label for="edit-first-name" >Phone</label>
+        <input type="text"  name="phone" maxlength="128" placeholder="Phone" />
+       </div>
+      </div></td>
+    </tr>
+   </table>
+   <div class="submit">
+    <div style="font-size:30px; line-height: 30px;">&nbsp;</div>
+    <input type="hidden" value="1" name="submit">
+    <button class="submitinfo" type="submit">Sign Me Up</button>
+   </div>
+  </fieldset>
+ </form>
+</div>
+<div class="container clearfix"></div>
+<aside class="layout-sup-footer" role="complementary"> </aside>
+<footer class="site-footer" role="contentinfo">
+ <div class="container clearfix"> 
+  <!--<div class="region region-footer-first">
+        <div class="ecp-homepage-marketo-form block block-ecp-homepage block-ecp-homepage-marketo-block" data-drupal-selector="ecp-homepage-marketo-form" id="block-marketoblock">
+          <h2>Subscribe to Our Newsletters</h2>
+          <form action="/about" method="post" id="ecp-homepage-marketo-form" accept-charset="UTF-8">
+            <div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-first-name form-item-first-name">
+              <label for="edit-first-name" class="js-form-required form-required">First Name</label>
+              <input data-drupal-selector="edit-first-name" data-msg-required="First Name is required." data-msg-maxlength="First Name field has a maximum length of 128." type="text" id="edit-first-name" name="first_name" value="" size="60" maxlength="128" class="form-text required label-placeholder" required="required" aria-required="true" placeholder="First Name *" />
+            </div>
+            <div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-last-name form-item-last-name">
+              <label for="edit-last-name" class="js-form-required form-required">Last Name</label>
+              <input data-drupal-selector="edit-last-name" data-msg-required="Last Name is required." data-msg-maxlength="Last Name field has a maximum length of 128." type="text" id="edit-last-name" name="last_name" value="" size="60" maxlength="128" class="form-text required label-placeholder" required="required" aria-required="true" placeholder="Last Name *" />
+            </div>
+            <div class="js-form-item form-item js-form-type-email form-type-email js-form-item-email form-item-email">
+              <label for="edit-email" class="js-form-required form-required">Email Address</label>
+              <input data-drupal-selector="edit-email" data-msg-email="Email Address does not contain a valid email." data-msg-required="Email Address is required." data-msg-maxlength="Email Address field has a maximum length of 254." type="email" id="edit-email" name="email" value="" size="60" maxlength="254" class="form-email required label-placeholder" required="required" aria-required="true" placeholder="Email Address *" />
+            </div>
+            <input data-drupal-selector="edit-submit" type="submit" id="edit-submit" name="op" value="Select Newsletter" class="button js-form-submit form-submit" />
+            <input autocomplete="off" data-drupal-selector="form-fb-ejmxfw6m2adsfxwvkyw-cqgy-aznhltunpfj7rrc" type="hidden" name="form_build_id" value="form-fB_Ejmxfw6m2adsfxWvkYW_cqgy_AznhLtUnpfj7RRc" />
+            <input data-drupal-selector="edit-ecp-homepage-marketo-form" type="hidden" name="form_id" value="ecp_homepage_marketo_form" />
+          </form>
+        </div>
+        <div class="views-element-container block block-views block-views-blockmicrosite-node-block-3" id="block-views-block-microsite-node-block-3">
+          <div>
+            <div class="view view-microsite-node view-id-microsite_node view-display-id-block_3 js-view-dom-id-d9237084d2fc48895547688ae0087a82bd726f7e15b2d0874b614ed5ab69ad80"> </div>
+          </div>
+        </div>
+      </div>-->
+  
+  <div class="region region-footer">
+   <nav role="navigation" aria-labelledby="block-footermenu-menu" id="block-footermenu" class="block block-menu navigation menu--footer-menu">
+    <h2 class="visually-hidden" id="block-footermenu-menu">Footer Menu</h2>
+    <ul class="menu">
+     <li class="menu-item first contact-us"> <a href="https://www.enterprisecommunity.org/about/contact-us" data-drupal-link-system-path="node/2957">Contact Us</a> </li>
+     <li class="menu-item privacy-policy"> <a href="https://www.enterprisecommunity.org/privacy-policy" data-drupal-link-system-path="node/3292">Privacy Policy</a> </li>
+     <li class="menu-item last terms-of-use"> <a href="https://www.enterprisecommunity.org/terms-of-use" data-drupal-link-system-path="node/2911">Terms of Use</a> </li>
+    </ul>
+   </nav>
+   <div id="block-footertext-2" class="block block-block-content block-block-content190bb515-4044-41f3-b333-8b3419863f9d">
+    <div class="text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+     <p>Permission is granted to copy, distribute the content on this website under the CC BY-ND license with EXCEPTIONS listed in the <a href="https://www.enterprisecommunity.org/terms-of-use">Terms of Use</a>.</p>
+    </div>
+    <div class="text-formatted field field--name-field-body-hidden field--type-text-long field--label-hidden parent-collapsible field__item">
+     <p>The Enterprise family includes Enterprise Community Partners, Inc., a national Section 501(c)(3) charitable organization. Financing is offered though tax-exempt subsidiaries, Enterprise Community Loan Fund, Inc., and Enterprise Community Investment, Inc. Housing development is offered through a related entity, Enterprise Homes, Inc., a 501(c)(3). Asset management is offered by our for-profit company Enterprise Community Asset Management, Inc. Additional financing is offered through Bellwether Enterprise Real Estate Capital, LLC. The content on this website reflects information about all of these. Our <a href="https://www.enterprisecommunity.org/terms-of-use">Terms of Use</a> describes how they are presented on this site.</p>
+    </div>
+   </div>
+   <div id="block-ecpcopyrighttext" class="block block-block-content block-block-content434ccc29-a524-4db4-a75f-57c876fa3ddd">
+    <div class="text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+     <p>&copy; %%xtyear%% Enterprise Community Partners, Inc.</p>
+    </div>
+   </div>
+   <div id="block-charitynavigator" class="block block-block-content block-block-contentbae30151-4465-4cb9-b19d-b319d8a78c33">
+    <div class="text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+     <p>Enterprise Community Partners is a:<br />
+      <img alt="Charity Navigator" data-entity-type="file" data-entity-uuid="1515d18b-7ed6-4011-80bd-764ce7982a50" src="https://www.enterprisecommunity.org/sites/default/files/inline-images/charity_navigator.png" /></p>
+    </div>
+   </div>
+  </div>
+ </div>
+</footer>
+</div>
+<script src="https://www.enterprisecommunity.org/core/assets/vendor/domready/ready.min.js?v=1.0.8"></script> 
+<script src="https://www.enterprisecommunity.org/core/assets/vendor/jquery/jquery.min.js?v=3.2.1"></script> 
+<script src="https://www.enterprisecommunity.org/core/assets/vendor/jquery-once/jquery.once.min.js?v=2.2.0"></script> 
+<script src="https://www.enterprisecommunity.org/core/misc/drupalSettingsLoader.js?v=8.4.5"></script> 
+<script src="https://www.enterprisecommunity.org/core/misc/drupal.js?v=8.4.5"></script> 
+<script src="https://www.enterprisecommunity.org/core/misc/drupal.init.js?v=8.4.5"></script> 
+<script src="https://www.enterprisecommunity.org/modules/datalayer/js/datalayer.js?v=1.x"></script> 
+<script src="https://www.enterprisecommunity.org/libraries/bxSlider/jquery.bxslider.min.js?p4tvq6"></script> 
+<script src="https://www.enterprisecommunity.org/themes/custom/ecp/js/select.js?v=1.5"></script> 
+<script src="https://www.enterprisecommunity.org/themes/custom/ecp/js/ecp.js?v=1.5"></script> 
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script> 
+<script src="https://www.enterprisecommunity.org/modules/contrib/clientside_validation/clientside_validation_jquery/js/cv.jquery.validate.js?p4tvq6"></script> 
+<script src="https://www.enterprisecommunity.org/core/misc/debounce.js?v=8.4.5"></script> 
+<script src="https://www.enterprisecommunity.org/modules/contrib/clientside_validation/clientside_validation_jquery/js/cv.jquery.ckeditor.js?p4tvq6"></script> 
+<script src="https://www.enterprisecommunity.org/libraries/masonry/masonry.pkgd.min.js?v="></script> 
+<script src="https://www.enterprisecommunity.org/libraries/imagesloaded/imagesloaded.pkgd.min.js?v="></script>
+</body>
+</html>

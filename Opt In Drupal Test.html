@@ -1,0 +1,76 @@
+%%[
+set @customerEmail = requestparameter('email_address')
+set @submit = requestparameter('submit')
+set @FirstName = requestparameter('first_name')
+set @LastName = requestparameter('last_name')
+set @Company = requestparameter('company_name')
+set @City = requestparameter('city')
+set @State = requestparameter('state')
+set @Phone = requestparameter('phone')
+
+if requestparameter('Opportunity360__c') == 'on' then set @Opportunity360__c = 'true' else set @Opportunity360__c = 'false' endif
+if requestparameter('MKTO_Capitol_Express__c') == 'on' then set @MKTO_Capitol_Express__c = 'true' else set @MKTO_Capitol_Express__c = 'false' endif
+if requestparameter('News_from_Denver__c') == 'on' then set @News_from_Denver__c = 'true' else set @News_from_Denver__c = 'false' endif
+if requestparameter('Chicago_News__c') == 'on' then set @Chicago_News__c = 'true' else set @Chicago_News__c = 'false' endif
+if requestparameter('New_York_News__c') == 'on' then set @New_York_News__c = 'true' else set @New_York_News__c = 'false' endif
+if requestparameter('Community_Developments__c') == 'on' then set @Community_Developments__c = 'true' else set @Community_Developments__c = 'false' endif
+if requestparameter('Northern_California__c') == 'on' then set @Northern_California__c = 'true' else set @Northern_California__c = 'false' endif
+if requestparameter('Community_Returns__c') == 'on' then set @Community_Returns__c = 'true' else set @Community_Returns__c = 'false' endif
+if requestparameter('Ohio_Report__c') == 'on' then set @Ohio_Report__c = 'true' else set @Ohio_Report__c = 'false' endif
+if requestparameter('eConnect__c') == 'on' then set @eConnect__c = 'true' else set @eConnect__c = 'false' endif
+if requestparameter('Pacific_Northwest__c') == 'on' then set @Pacific_Northwest__c = 'true' else set @Pacific_Northwest__c = 'false' endif
+if requestparameter('Live_Online_Events__c') == 'on' then set @Live_Online_Events__c = 'true' else set @Live_Online_Events__c = 'false' endif
+if requestparameter('Southeast_News__c') == 'on' then set @Southeast_News__c = 'true' else set @Southeast_News__c = 'false' endif
+if requestparameter('Mid_Atlantic_News__c') == 'on' then set @Mid_Atlantic_News__c = 'true' else set @Mid_Atlantic_News__c = 'false' endif
+if requestparameter('Southern_California__c') == 'on' then set @Southern_California__c = 'true' else set @Southern_California__c = 'false' endif
+if requestparameter('MKTO_All_Enterprise_News__c') == 'on' then set @MKTO_All_Enterprise_News__c = 'true' else set @MKTO_All_Enterprise_News__c = 'false' endif 
+]%%
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>Enterprise Community Partners Email Opt In Processing</title>
+ <link rel="shortcut icon" type="image/png" href="https://www.enterprisecommunity.org/sites/default/files/favicon.ico"/>
+ <meta name="description" content="">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<center>
+<table width="500">
+<tr>
+<td>
+
+FirstName:  %%=v(@FirstName)=%%<br>
+LastName:  %%=v(@LastName)=%%<br>
+Company:  %%=v(@Company)=%%<br>
+City:  %%=v(@City)=%%<br>
+State:  %%=v(@State)=%%<br>
+Phone:  %%=v(@Phone)=%%<br>
+customerEmail:  %%=v(@customerEmail)=%%<br>
+submit:  %%=v(@submit)=%%<br>
+
+<br><hr><br>
+
+Opportunity360__c:  %%=v(@Opportunity360__c)=%%<br>
+MKTO_Capitol_Express__c:  %%=v(@MKTO_Capitol_Express__c)=%%<br>
+News_from_Denver__c:  %%=v(@News_from_Denver__c)=%%<br>
+Chicago_News__c:  %%=v(@Chicago_News__c)=%%<br>
+New_York_News__c:  %%=v(@New_York_News__c)=%%<br>
+Community_Developments__c:  %%=v(@Community_Developments__c)=%%<br>
+Northern_California__c:  %%=v(@Northern_California__c)=%%<br>
+Community_Returns__c:  %%=v(@Community_Returns__c)=%%<br>
+Ohio_Report__c:  %%=v(@Ohio_Report__c)=%%<br>
+eConnect__c:  %%=v(@eConnect__c)=%%<br>
+Pacific_Northwest__c:  %%=v(@Pacific_Northwest__c)=%%<br>
+Live_Online_Events__c:  %%=v(@Live_Online_Events__c)=%%<br>
+Southeast_News__c:  %%=v(@Southeast_News__c)=%%<br>
+Mid_Atlantic_News__c:  %%=v(@Mid_Atlantic_News__c)=%%<br>
+Southern_California__c:  %%=v(@Southern_California__c)=%%<br>
+MKTO_All_Enterprise_News__c:  %%=v(@MKTO_All_Enterprise_News__c)=%%<br>
+
+</td>
+</tr>
+</table>
+</body>
+</html>

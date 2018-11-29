@@ -1,0 +1,350 @@
+%%[
+
+/* set hardcoded values for new leads */
+set @LeadSource = 'Website - Preference Center'
+set @RecordTypeID = '01214000001FsP8'
+set @LeadOwnerID = '005a0000008tzHuAAI'
+
+/* get form values */
+
+set @customerEmail = requestparameter('email_address')
+set @submit = requestparameter('submit')
+if @submit == '1' and length(@customerEmail) >= 5 then
+
+ /* lookup to SFDC logic - lookup lead and contact objects based on email address */
+ set @leadLookup = RetrieveSalesforceObjects('Lead', 'Id,HasOptedOutOfEmail,FirstName,LastName,Company,Email,City,State,Phone,Capitol_Express__c,News_from_Denver__c,Chicago_News__c,New_York_News__c,Community_Developments__c,Northern_California__c,Community_Returns__c,Ohio_Report__c,eConnect__c, Pacific_Northwest__c,Live_Online_Events__c,Southeast_News__c,Mid_Atlantic_News__c,Southern_California__c,MKTO_All_Enterprise_News__c,Opportunity360__c', 'Email', '=', @customerEmail)
+ if rowcount(@leadLookup) >= 1 then
+  set @leadExist = '1'
+  set @EmailOptInFlagLead = field(row(@leadLookup, 1), 'HasOptedOutOfEmail')
+ else endif
+
+ set @contactLookup = RetrieveSalesforceObjects('Contact', 'Id,HasOptedOutOfEmail,FirstName,LastName,Nickname__c,Company__c,Email,MailingCity,MailingState,Phone,MKTO_Capitol_Express__c,News_from_Denver__c,Chicago_News__c,New_York_News__c,Community_Developments__c,Northern_California__c,Community_Returns__c,Ohio_Report__c,eConnect__c,Pacific_Northwest__c,Live_Online_Events__c,Southeast_News__c,Mid_Atlantic_News__c,Southern_California__c,MKTO_All_Enterprise_News__c,Opportunity360__c', 'Email', '=', @customerEmail)  
+ if rowcount(@contactLookup) >= 1 then
+  set @contactExist = '1'
+  set @EmailOptInFlagContact = field(row(@contactLookup, 1), 'HasOptedOutOfEmail')
+ else endif
+
+ /* get form data */
+ set @FirstName = requestparameter('first_name')
+ set @LastName = requestparameter('last_name')
+ set @Company = requestparameter('company_name')
+ set @City = requestparameter('city')
+ set @State = requestparameter('state')
+ set @Phone = requestparameter('phone')
+
+ if requestparameter('Opportunity360__c') == 'on' then set @Opportunity360__c = 'true' else set @Opportunity360__c = 'false' endif
+ if requestparameter('MKTO_Capitol_Express__c') == 'on' then set @MKTO_Capitol_Express__c = 'true' else set @MKTO_Capitol_Express__c = 'false' endif
+ if requestparameter('News_from_Denver__c') == 'on' then set @News_from_Denver__c = 'true' else set @News_from_Denver__c = 'false' endif
+ if requestparameter('Chicago_News__c') == 'on' then set @Chicago_News__c = 'true' else set @Chicago_News__c = 'false' endif
+ if requestparameter('New_York_News__c') == 'on' then set @New_York_News__c = 'true' else set @New_York_News__c = 'false' endif
+ if requestparameter('Community_Developments__c') == 'on' then set @Community_Developments__c = 'true' else set @Community_Developments__c = 'false' endif
+ if requestparameter('Northern_California__c') == 'on' then set @Northern_California__c = 'true' else set @Northern_California__c = 'false' endif
+ if requestparameter('Community_Returns__c') == 'on' then set @Community_Returns__c = 'true' else set @Community_Returns__c = 'false' endif
+ if requestparameter('Ohio_Report__c') == 'on' then set @Ohio_Report__c = 'true' else set @Ohio_Report__c = 'false' endif
+ if requestparameter('eConnect__c') == 'on' then set @eConnect__c = 'true' else set @eConnect__c = 'false' endif
+ if requestparameter('Pacific_Northwest__c') == 'on' then set @Pacific_Northwest__c = 'true' else set @Pacific_Northwest__c = 'false' endif
+ if requestparameter('Live_Online_Events__c') == 'on' then set @Live_Online_Events__c = 'true' else set @Live_Online_Events__c = 'false' endif
+ if requestparameter('Southeast_News__c') == 'on' then set @Southeast_News__c = 'true' else set @Southeast_News__c = 'false' endif
+ if requestparameter('Mid_Atlantic_News__c') == 'on' then set @Mid_Atlantic_News__c = 'true' else set @Mid_Atlantic_News__c = 'false' endif
+ if requestparameter('Southern_California__c') == 'on' then set @Southern_California__c = 'true' else set @Southern_California__c = 'false' endif
+ if requestparameter('MKTO_All_Enterprise_News__c') == 'on' then set @MKTO_All_Enterprise_News__c = 'true' else set @MKTO_All_Enterprise_News__c = 'false' endif
+
+
+ /* if lead records exists on email address, loop through all records and update subscriptions only, not PI */
+ if @leadExist == 1 then
+  set @leadCounter = 0
+  for @l = 1 to rowcount(@leadLookup) do
+  set @contactKey = field(row(@leadLookup, @l), 'Id')
+
+  /* lookup to see if they already exist in MC under the email address */
+  set @AllSubsLookup = lookuprows('ENT._Subscribers', 'SubscriberKey', @contactKey)
+
+  if rowcount(@AllSubsLookup) >= 1 then
+   /* change their SFMC status to active on the contact key */
+   SET @Subscriber = CreateObject("Subscriber")
+   SetObjectProperty(@Subscriber, "SubscriberKey",@contactKey)
+   /* SetObjectProperty(@Subscriber, "EmailAddress", @customerEmail) */
+   SetObjectProperty(@Subscriber, "Status", "Active" ) 
+   SET @Status = InvokeUpdate(@Subscriber, @createErrDesc, @createErrNo, @createOpts)
+  else endif
+
+  /* company 'unknown' logic */
+  if field(row(@leadLookup, @l), 'Company') == 'Unknown' and @Company != '' then
+  set @CompanyInsert = @Company
+  else
+  set @CompanyInsert = field(row(@leadLookup, @l), 'Company')
+  endif
+
+  /* PI field logic */
+  set @LeadFirstName = field(row(@leadLookup, @l), 'FirstName') 
+  set @LeadLastName = field(row(@leadLookup, @l), 'LastName')
+     set @LeadCity = field(row(@leadLookup, @l), 'City')
+     set @LeadState = field(row(@leadLookup, @l), 'State')
+     set @LeadPhone = field(row(@leadLookup, @l), 'Phone')
+
+     if (empty(@LeadFirstName) == true or @LeadFirstName == 'Unknown') and length(@FirstName) >= 1 then 
+      set @FirstNameInsert = @FirstName 
+     else 
+      set @FirstNameInsert = @LeadFirstName 
+     endif
+
+     if (empty(@LeadLastName) == true or @LeadLastName == 'Unknown') and length(@LastName) >= 1 then 
+      set @LastNameInsert = @LastName 
+     else 
+      set @LastNameInsert = @LeadLastName 
+     endif
+
+     if (empty(@LeadCity) == true or @LeadCity == 'Unknown') and length(@City) >= 1 then 
+      set @CityInsert = @City 
+     else 
+      set @CityInsert = @LeadCity 
+     endif
+
+     if (empty(@LeadState) == true or @LeadState == 'Unknown') and length(@State) >= 1 then 
+      set @StateInsert = @State 
+     else 
+      set @StateInsert = @LeadState 
+     endif
+
+     if (empty(@LeadPhone) == true or @LeadPhone == 'Unknown') and length(@Phone) >= 1 then 
+      set @PhoneInsert = @Phone 
+     else 
+      set @PhoneInsert = @LeadPhone 
+     endif
+
+
+     /* NEW logic - append new subscriptions only, do not unsubscribe any subscriptions */
+     if @Opportunity360__c == 'false' and field(row(@leadLookup, @l), 'Opportunity360__c') == 'true' then set @Opportunity360__c = 'true' endif
+  if @MKTO_Capitol_Express__c == 'false' and field(row(@leadLookup, @l), 'Capitol_Express__c') == 'true' then set @MKTO_Capitol_Express__c = 'true' endif
+  if @News_from_Denver__c == 'false' and field(row(@leadLookup, @l), 'News_from_Denver__c') == 'true' then set @News_from_Denver__c = 'true' endif
+  if @Chicago_News__c == 'false' and field(row(@leadLookup, @l), 'Chicago_News__c') == 'true' then set @Chicago_News__c = 'true' endif
+  if @New_York_News__c == 'false' and field(row(@leadLookup, @l), 'New_York_News__c') == 'true' then set @New_York_News__c = 'true' endif
+  if @Community_Developments__c == 'false' and field(row(@leadLookup, @l), 'Community_Developments__c') == 'true' then set @Community_Developments__c = 'true' endif
+  if @Northern_California__c == 'false' and field(row(@leadLookup, @l), 'Northern_California__c') == 'true' then set @Northern_California__c = 'true' endif
+  if @Community_Returns__c == 'false' and field(row(@leadLookup, @l), 'Community_Returns__c') == 'true' then set @Community_Returns__c = 'true' endif
+  if @Ohio_Report__c == 'false' and field(row(@leadLookup, @l), 'Ohio_Report__c') == 'true' then set @Ohio_Report__c = 'true' endif
+  if @eConnect__c == 'false' and field(row(@leadLookup, @l), 'eConnect__c') == 'true' then set @eConnect__c = 'true' endif
+  if @Pacific_Northwest__c == 'false' and field(row(@leadLookup, @l), 'Pacific_Northwest__c') == 'true' then set @Pacific_Northwest__c = 'true' endif
+  if @Live_Online_Events__c == 'false' and field(row(@leadLookup, @l), 'Live_Online_Events__c') == 'true' then set @Live_Online_Events__c = 'true' endif
+  if @Southeast_News__c == 'false' and field(row(@leadLookup, @l), 'Southeast_News__c') == 'true' then set @Southeast_News__c = 'true' endif
+  if @Mid_Atlantic_News__c == 'false' and field(row(@leadLookup, @l), 'Mid_Atlantic_News__c') == 'true' then set @Mid_Atlantic_News__c = 'true' endif
+  if @Southern_California__c == 'false' and field(row(@leadLookup, @l), 'Southern_California__c') == 'true' then set @Southern_California__c = 'true' endif
+  if @MKTO_All_Enterprise_News__c == 'false' and field(row(@leadLookup, @l), 'MKTO_All_Enterprise_News__c') == 'true' then set @MKTO_All_Enterprise_News__c = 'true' endif
+
+     /* update lead record */
+
+  set @leadUpdate = UpdateSingleSalesforceObject('Lead', @contactKey, 'HasOptedOutOfEmail', 'false', 'Capitol_Express__c', @MKTO_Capitol_Express__c, 'News_from_Denver__c', @News_from_Denver__c, 'Chicago_News__c', @Chicago_News__c, 'New_York_News__c', @New_York_News__c, 'Community_Developments__c', @Community_Developments__c, 'Northern_California__c', @Northern_California__c, 'Community_Returns__c', @Community_Returns__c, 'Ohio_Report__c', @Ohio_Report__c, 'eConnect__c', @eConnect__c, 'Pacific_Northwest__c', @Pacific_Northwest__c, 'Live_Online_Events__c', @Live_Online_Events__c, 'Southeast_News__c', @Southeast_News__c, 'Mid_Atlantic_News__c', @Mid_Atlantic_News__c, 'Southern_California__c', @Southern_California__c, 'MKTO_All_Enterprise_News__c', @MKTO_All_Enterprise_News__c, 'Opportunity360__c', @Opportunity360__c, 'FirstName', @FirstNameInsert, 'LastName', @LastNameInsert, 'Company', @CompanyInsert, 'State', @StateInsert, 'City', @CityInsert, 'Phone', @PhoneInsert)
+  set @leadCounter = add(@leadCounter, 1)
+
+  next @l
+ else endif
+
+ /* if contact records exists on email address, loop through all records and update subscriptions only, not PI */
+ if @contactExist == 1 then
+  set @contactCounter = 0
+  for @c = 1 to rowcount(@contactLookup) do
+  set @contactKey = field(row(@contactLookup, @c), 'Id')
+
+  /* lookup to see if they already exist in MC under the email address */
+  set @AllSubsLookup = lookuprows('ENT._Subscribers', 'SubscriberKey', @contactKey)
+
+  if rowcount(@AllSubsLookup) >= 1 then
+   /* change their SFMC status to active on the contact key */
+   SET @Subscriber = CreateObject("Subscriber")
+   SetObjectProperty(@Subscriber, "SubscriberKey",@contactKey)
+   /* SetObjectProperty(@Subscriber, "EmailAddress", @customerEmail) */
+   SetObjectProperty(@Subscriber, "Status", "Active" )
+   SET @Status = InvokeUpdate(@Subscriber, @createErrDesc, @createErrNo, @createOpts)
+  else endif
+
+  /* company 'unknown' logic */
+  if field(row(@contactLookup, @c), 'Company__c') == 'Unknown' and @Company != '' then
+  set @CompanyInsert = @Company
+  else
+  set @CompanyInsert = field(row(@contactLookup, @c), 'Company__c')
+  endif
+
+  /* PI field logic */
+  set @ContactFirstName = field(row(@contactLookup, @c), 'FirstName') 
+  set @ContactLastName = field(row(@contactLookup, @c), 'LastName')
+     set @ContactCity = field(row(@contactLookup, @c), 'MailingCity')
+     set @ContactState = field(row(@contactLookup, @c), 'MailingState')
+     set @ContactPhone = field(row(@contactLookup, @c), 'Phone')
+     set @ContactNickname = field(row(@contactLookup, @c), 'Nickname__c')
+
+     if (empty(@ContactFirstName) == true or @ContactFirstName == 'Unknown') and length(@FirstName) >= 1 then 
+      set @FirstNameInsert = @FirstName 
+     else 
+      set @FirstNameInsert = @ContactFirstName 
+     endif
+
+     if (empty(@ContactLastName) == true or @ContactLastName == 'Unknown') and length(@LastName) >= 1 then 
+      set @LastNameInsert = @LastName 
+     else 
+      set @LastNameInsert = @ContactLastName 
+     endif
+
+     if (empty(@ContactCity) == true or @ContactCity == 'Unknown') and length(@City) >= 1 then 
+      set @CityInsert = @City 
+     else 
+      set @CityInsert = @ContactCity 
+     endif
+
+     if (empty(@ContactState) == true or @ContactState == 'Unknown') and length(@State) >= 1 then 
+      set @StateInsert = @State 
+     else 
+      set @StateInsert = @ContactState 
+     endif
+
+     if (empty(@ContactPhone) == true or @ContactPhone == 'Unknown') and length(@Phone) >= 1 then 
+      set @PhoneInsert = @Phone 
+     else 
+      set @PhoneInsert = @ContactPhone 
+     endif
+
+     /* Nickname logic */
+     if @ContactFirstName != @FirstName and length(@FirstName) >= 1 and length(@ContactNickname) == 0 then
+      set @NickNameInsert = @FirstName
+     else
+      set @NickNameInsert = @ContactNickname
+     endif 
+
+
+        /* NEW logic - append new subscriptions only, do not unsubscribe any subscriptions */
+        if @Opportunity360__c == 'false' and field(row(@contactLookup, @c), 'Opportunity360__c') == 'true' then set @Opportunity360__c = 'true' endif
+  if @MKTO_Capitol_Express__c == 'false' and field(row(@contactLookup, @c), 'MKTO_Capitol_Express__c') == 'true' then set @MKTO_Capitol_Express__c = 'true' endif
+  if @News_from_Denver__c == 'false' and field(row(@contactLookup, @c), 'News_from_Denver__c') == 'true' then set @News_from_Denver__c = 'true' endif
+  if @Chicago_News__c == 'false' and field(row(@contactLookup, @c), 'Chicago_News__c') == 'true' then set @Chicago_News__c = 'true' endif
+  if @New_York_News__c == 'false' and field(row(@contactLookup, @c), 'New_York_News__c') == 'true' then set @New_York_News__c = 'true' endif
+  if @Community_Developments__c == 'false' and field(row(@contactLookup, @c), 'Community_Developments__c') == 'true' then set @Community_Developments__c = 'true' endif
+  if @Northern_California__c == 'false' and field(row(@contactLookup, @c), 'Northern_California__c') == 'true' then set @Northern_California__c = 'true' endif
+  if @Community_Returns__c == 'false' and field(row(@contactLookup, @c), 'Community_Returns__c') == 'true' then set @Community_Returns__c = 'true' endif
+  if @Ohio_Report__c == 'false' and field(row(@contactLookup, @c), 'Ohio_Report__c') == 'true' then set @Ohio_Report__c = 'true' endif
+  if @eConnect__c == 'false' and field(row(@contactLookup, @c), 'eConnect__c') == 'true' then set @eConnect__c = 'true' endif
+  if @Pacific_Northwest__c == 'false' and field(row(@contactLookup, @c), 'Pacific_Northwest__c') == 'true' then set @Pacific_Northwest__c = 'true' endif
+  if @Live_Online_Events__c == 'false' and field(row(@contactLookup, @c), 'Live_Online_Events__c') == 'true' then set @Live_Online_Events__c = 'true' endif
+  if @Southeast_News__c == 'false' and field(row(@contactLookup, @c), 'Southeast_News__c') == 'true' then set @Southeast_News__c = 'true' endif
+  if @Mid_Atlantic_News__c == 'false' and field(row(@contactLookup, @c), 'Mid_Atlantic_News__c') == 'true' then set @Mid_Atlantic_News__c = 'true' endif
+  if @Southern_California__c == 'false' and field(row(@contactLookup, @c), 'Southern_California__c') == 'true' then set @Southern_California__c = 'true' endif
+  if @MKTO_All_Enterprise_News__c == 'false' and field(row(@contactLookup, @c), 'MKTO_All_Enterprise_News__c') == 'true' then set @MKTO_All_Enterprise_News__c = 'true' endif
+
+
+  /* update contact record */
+  set @contactUpdate = UpdateSingleSalesforceObject('Contact', @contactKey, 'HasOptedOutOfEmail', 'false', 'Company__c', @CompanyInsert, 'MKTO_Capitol_Express__c', @MKTO_Capitol_Express__c, 'News_from_Denver__c', @News_from_Denver__c, 'Chicago_News__c', @Chicago_News__c, 'New_York_News__c', @New_York_News__c, 'Community_Developments__c', @Community_Developments__c, 'Northern_California__c', @Northern_California__c, 'Community_Returns__c', @Community_Returns__c, 'Ohio_Report__c', @Ohio_Report__c, 'eConnect__c', @eConnect__c, 'Pacific_Northwest__c', @Pacific_Northwest__c, 'Live_Online_Events__c', @Live_Online_Events__c, 'Southeast_News__c', @Southeast_News__c, 'Mid_Atlantic_News__c', @Mid_Atlantic_News__c, 'Southern_California__c', @Southern_California__c, 'MKTO_All_Enterprise_News__c', @MKTO_All_Enterprise_News__c, 'Opportunity360__c', @Opportunity360__c, 'FirstName', @FirstNameInsert, 'LastName', @LastNameInsert, 'MailingState', @StateInsert, 'MailingCity', @CityInsert, 'Phone', @PhoneInsert, 'Nickname__c', @NickNameInsert)
+  set @contactCounter = add(@contactCounter, 1)
+  next @c
+ else endif
+
+ /* if no contacts or leads are found under that email address */
+ if rowcount(@leadLookup) == 0 and rowcount(@contactLookup) == 0 then
+  /* create new lead */
+  if length(@Company) == 0 then set @CompanyInsert = 'Unknown' else set @CompanyInsert = @Company endif
+  set @createNewLead = CreateSalesforceObject('lead', 27, 
+  'FirstName', @FirstName, 
+  'LastName', @LastName, 
+  'Email', @customerEmail, 
+  'Company', @CompanyInsert, 
+  'City__c', @City, 
+  'State__c', @State, 
+  'Phone', @Phone, 
+  'HasOptedOutOfEmail', 'false', 
+  'Capitol_Express__c', @MKTO_Capitol_Express__c, 
+  'News_from_Denver__c', @News_from_Denver__c, 
+  'Chicago_News__c', @Chicago_News__c, 
+  'New_York_News__c', @New_York_News__c, 
+  'Community_Developments__c', @Community_Developments__c, 
+  'Northern_California__c', @Northern_California__c, 
+  'Community_Returns__c', @Community_Returns__c, 
+  'Ohio_Report__c', @Ohio_Report__c, 
+  'eConnect__c', @eConnect__c, 
+  'Pacific_Northwest__c', @Pacific_Northwest__c, 
+  'Live_Online_Events__c', @Live_Online_Events__c, 
+  'Southeast_News__c', @Southeast_News__c, 
+  'Mid_Atlantic_News__c', @Mid_Atlantic_News__c, 
+  'Southern_California__c', @Southern_California__c, 
+  'MKTO_All_Enterprise_News__c', @MKTO_All_Enterprise_News__c, 
+  'Opportunity360__c', @Opportunity360__c,
+  'LeadSource', @LeadSource,
+  'RecordTypeID', @RecordTypeID,
+  'OwnerId', @LeadOwnerID
+
+  )
+ else 
+  set @insertResult = '0'
+ endif
+
+ /* redirect to thank you page */
+ if (@contactCounter >= 1 or @leadCounter >= 1) and (@EmailOptInFlagLead == true or @EmailOptInFlagContact == true) then
+ redirect('https://www.enterprisecommunity.org/news-and-events/newsletters/thank-you-for-updates')
+ else
+ redirect('https://www.enterprisecommunity.org/news-and-events/newsletters/thank-you-for-subscribing')
+ endif
+ 
+   
+]%%
+  <!doctype html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>Enterprise Community Partners Email Opt In Processing</title>
+ <link rel="shortcut icon" type="image/png" href="https://www.enterprisecommunity.org/sites/default/files/favicon.ico"/>
+ <meta name="description" content="">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <table align="center" width="80%">
+    <tr>
+      <td>
+IDs affected:<br>
+%%[for @a = 1 to rowcount(@leadLookup) do 
+set @leadIDdebug = field(row(@leadLookup, @a), 'Id')
+]%%
+Lead ID: %%=v(@leadIDdebug)=%%<br>
+%%[next @a]%%
+<br><br>
+
+%%[for @b = 1 to rowcount(@contactLookup) do 
+set @contactIDdebug = field(row(@contactLookup, @b), 'Id')
+]%%
+Contact ID: %%=v(@contactIDdebug)=%%<br>
+%%[next @b]%%
+<br><br>
+
+
+customer email: %%=v(@customerEmail)=%%<br>
+rowcount lead: %%=rowcount(@leadLookup)=%%<br>
+rowcount contact: %%=rowcount(@contactLookup)=%%<br>
+lead counter: %%=v(@leadCounter)=%%<br>
+contact counter: %%=v(@contactCounter)=%%<br>
+DEBUG TABLE<br>
+FirstName: %%=v(@FirstName)=%%<br>
+LastName: %%=v(@LastName)=%%<br>
+CompanyInsert: %%=v(@CompanyInsert)=%%
+leadCounter: %%=v(@leadCounter)=%%<br>
+contactCounter: %%=v(@contactCounter)=%%<br>
+insertResult: %%=v(@insertResult)=%%<br>
+Opportunity360__c %%=v(@Opportunity360__c)=%%<br>
+MKTO_Capitol_Express__c %%=v(@MKTO_Capitol_Express__c)=%%<br>
+News_from_Denver__c %%=v(@News_from_Denver__c)=%%<br>
+Chicago_News__c %%=v(@Chicago_News__c)=%%<br>
+New_York_News__c %%=v(@New_York_News__c)=%%<br>
+Community_Developments__c %%=v(@Community_Developments__c)=%%<br>
+Northern_California__c %%=v(@Northern_California__c)=%%<br>
+Community_Returns__c %%=v(@Community_Returns__c)=%%<br>
+Ohio_Report__c %%=v(@Ohio_Report__c)=%%<br>
+eConnect__c %%=v(@eConnect__c)=%%<br>
+Pacific_Northwest__c %%=v(@Pacific_Northwest__c)=%%<br>
+Live_Online_Events__c %%=v(@Live_Online_Events__c)=%%<br>
+Southeast_News__c %%=v(@Southeast_News__c)=%%<br>
+Mid_Atlantic_News__c %%=v(@Mid_Atlantic_News__c)=%%<br>
+Southern_California__c %%=v(@Southern_California__c)=%%<br>
+MKTO_All_Enterprise_News__c %%=v(@MKTO_All_Enterprise_News__c)=%%<br>
+   </tr>
+  </table>
+  </body>
+</html>
+%%[else 
+/* redirect back to form if no submit is detected */
+redirect(cloudpagesURL(409))
+endif
+]%% 

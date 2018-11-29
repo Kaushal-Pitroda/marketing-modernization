@@ -1,0 +1,532 @@
+<!--%%[
+
+set @contactKey = _SubscriberKey
+set @customerEmail = emailaddr
+
+/* remove when live */
+if empty(@contactKey) == true then
+set @contactKey = queryparameter('key')
+endif
+/* remove when live */
+
+if not empty(@contactKey) == true then
+
+/* determine lead and contact IDs from email address */ 
+
+/* guard against email address as subkey, will instead lookup against email address */
+if indexof(@contactKey, '@') >= 1 then
+
+ /* search by email */
+ set @leadLookup = RetrieveSalesforceObjects('Lead', 'Id,FirstName,LastName,Company,HasOptedOutOfEmail,Email,City,State,Phone,Capitol_Express__c,News_from_Denver__c,Chicago_News__c,New_York_News__c,Community_Developments__c,Northern_California__c,Community_Returns__c,Ohio_Report__c,eConnect__c,Pacific_Northwest__c,Live_Online_Events__c,Southeast_News__c,Mid_Atlantic_News__c,Southern_California__c,MKTO_All_Enterprise_News__c,Opportunity360__c', 'Email', '=', @contactKey)
+else 
+ /* search by ID */
+ set @leadLookup = RetrieveSalesforceObjects('Lead', 'Id,FirstName,LastName,Company,HasOptedOutOfEmail,Email,City,State,Phone,Capitol_Express__c,News_from_Denver__c,Chicago_News__c,New_York_News__c,Community_Developments__c,Northern_California__c,Community_Returns__c,Ohio_Report__c,eConnect__c,Pacific_Northwest__c,Live_Online_Events__c,Southeast_News__c,Mid_Atlantic_News__c,Southern_California__c,MKTO_All_Enterprise_News__c,Opportunity360__c', 'Id', '=', @contactKey)
+endif
+/* set @leadLookup = lookuprows('Lead_Salesforce', '_ContactKey', @contactKey) */
+if rowcount(@leadLookup) >= 1 then
+ set @recordType = 'lead'
+ set @recordTypeLead = '1'
+ set @EmailOptOut = field(row(@leadLookup, 1), 'HasOptedOutOfEmail')
+ set @Id = field(row(@leadLookup, 1), 'Id')
+ set @FirstName = field(row(@leadLookup, 1), 'FirstName')
+ set @LastName = field(row(@leadLookup, 1), 'LastName')
+ set @Company = field(row(@leadLookup, 1), 'Company')
+ set @Email = field(row(@leadLookup, 1), 'Email')
+ set @City = field(row(@leadLookup, 1), 'City')
+ set @State = field(row(@leadLookup, 1), 'State')
+ set @Phone = field(row(@leadLookup, 1), 'Phone')
+ set @MKTO_Capitol_Express__c = field(row(@leadLookup, 1), 'Capitol_Express__c')
+ set @News_from_Denver__c = field(row(@leadLookup, 1), 'News_from_Denver__c')
+ set @Chicago_News__c = field(row(@leadLookup, 1), 'Chicago_News__c')
+ set @New_York_News__c = field(row(@leadLookup, 1), 'New_York_News__c')
+ set @Community_Developments__c = field(row(@leadLookup, 1), 'Community_Developments__c')
+ set @Northern_California__c = field(row(@leadLookup, 1), 'Northern_California__c')
+ set @Community_Returns__c = field(row(@leadLookup, 1), 'Community_Returns__c')
+ set @Ohio_Report__c = field(row(@leadLookup, 1), 'Ohio_Report__c')
+ set @eConnect__c = field(row(@leadLookup, 1), 'eConnect__c')
+ set @Pacific_Northwest__c = field(row(@leadLookup, 1), 'Pacific_Northwest__c')
+ set @Live_Online_Events__c = field(row(@leadLookup, 1), 'Live_Online_Events__c')
+ set @Southeast_News__c = field(row(@leadLookup, 1), 'Southeast_News__c')
+ set @Mid_Atlantic_News__c = field(row(@leadLookup, 1), 'Mid_Atlantic_News__c')
+ set @Southern_California__c = field(row(@leadLookup, 1), 'Southern_California__c')
+ set @MKTO_All_Enterprise_News__c = field(row(@leadLookup, 1), 'MKTO_All_Enterprise_News__c')
+ set @Opportunity360__c = field(row(@leadLookup, 1), 'Opportunity360__c')
+else endif  
+  
+
+
+/* guard against email address as subkey, will instead lookup against email address */
+if indexof(@contactKey, '@') >= 1 then
+ /* search by email */
+ set @contactLookup = RetrieveSalesforceObjects('Contact', 'Id,FirstName,LastName,Company__c,Email,HasOptedOutOfEmail,MailingCity,MailingState,Phone,MKTO_Capitol_Express__c,News_from_Denver__c,Chicago_News__c,New_York_News__c,Community_Developments__c,Northern_California__c,Community_Returns__c,Ohio_Report__c,eConnect__c,Pacific_Northwest__c,Live_Online_Events__c,Southeast_News__c,Mid_Atlantic_News__c,Southern_California__c,MKTO_All_Enterprise_News__c,Opportunity360__c', 'Email', '=', @contactKey) 
+else
+ /* search by ID */ 
+ set @contactLookup = RetrieveSalesforceObjects('Contact', 'Id,FirstName,LastName,Company__c,Email,HasOptedOutOfEmail,MailingCity,MailingState,Phone,MKTO_Capitol_Express__c,News_from_Denver__c,Chicago_News__c,New_York_News__c,Community_Developments__c,Northern_California__c,Community_Returns__c,Ohio_Report__c,eConnect__c,Pacific_Northwest__c,Live_Online_Events__c,Southeast_News__c,Mid_Atlantic_News__c,Southern_California__c,MKTO_All_Enterprise_News__c,Opportunity360__c', 'Id', '=', @contactKey) 
+endif
+/* set @contactLookup = lookuprows('Contact_Salesforce', '_ContactKey', @contactKey) */
+if rowcount(@contactLookup) >= 1 then
+ set @recordType = 'contact'
+ set @recordTypeContact = '1'
+ set @EmailOptOut = field(row(@contactLookup, 1), 'HasOptedOutOfEmail')
+ set @Id = field(row(@contactLookup, 1), 'Id')
+ set @FirstName = field(row(@contactLookup, 1), 'FirstName')
+ set @LastName = field(row(@contactLookup, 1), 'LastName')
+ set @Company = field(row(@contactLookup, 1), 'Company__c')
+ set @Email = field(row(@contactLookup, 1), 'Email')
+ set @City = field(row(@contactLookup, 1), 'MailingCity')
+ set @State = field(row(@contactLookup, 1), 'MailingState')
+ set @Phone = field(row(@contactLookup, 1), 'Phone')
+ set @MKTO_Capitol_Express__c = field(row(@contactLookup, 1), 'MKTO_Capitol_Express__c')
+ set @News_from_Denver__c = field(row(@contactLookup, 1), 'News_from_Denver__c')
+ set @Chicago_News__c = field(row(@contactLookup, 1), 'Chicago_News__c')
+ set @New_York_News__c = field(row(@contactLookup, 1), 'New_York_News__c')
+ set @Community_Developments__c = field(row(@contactLookup, 1), 'Community_Developments__c')
+ set @Northern_California__c = field(row(@contactLookup, 1), 'Northern_California__c')
+ set @Community_Returns__c = field(row(@contactLookup, 1), 'Community_Returns__c')
+ set @Ohio_Report__c = field(row(@contactLookup, 1), 'Ohio_Report__c')
+ set @eConnect__c = field(row(@contactLookup, 1), 'eConnect__c')
+ set @Pacific_Northwest__c = field(row(@contactLookup, 1), 'Pacific_Northwest__c')
+ set @Live_Online_Events__c = field(row(@contactLookup, 1), 'Live_Online_Events__c')
+ set @Southeast_News__c = field(row(@contactLookup, 1), 'Southeast_News__c')
+ set @Mid_Atlantic_News__c = field(row(@contactLookup, 1), 'Mid_Atlantic_News__c')
+ set @Southern_California__c = field(row(@contactLookup, 1), 'Southern_California__c')
+ set @MKTO_All_Enterprise_News__c = field(row(@contactLookup, 1), 'MKTO_All_Enterprise_News__c')
+ set @Opportunity360__c = field(row(@contactLookup, 1), 'Opportunity360__c')
+else endif
+
+if indexof(@contactKey, '@') >= 1 then
+set @contactKey = @Id 
+else endif
+]%%-->
+<!doctype html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Enterprise Community Partners</title>
+  <link rel="shortcut icon" href="https://www.enterprisecommunity.org/sites/default/files/favicon.ico" type="image/vnd.microsoft.icon" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link href="http://cloud.info.enterprisecommunity.org/ecp-sfmc-css" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+   
+  $("#prefForm").submit(function(e) {
+ $('#emailError').removeClass('show').addClass('hide');
+   var isValid = true
+    
+ /* validate email on submit */  
+ var em = $("#emailInput").val(); 
+  var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+   if (!(re.test(em))) {
+    $('#emailError').removeClass('hide').addClass('show');
+    console.log("bad email");
+    console.log(em);
+    isValid = false;
+   }
+  
+  if (isValid == false) 
+  e.preventDefault();  
+
+   /* alert if no subscriptions are checked */
+   if ($('.option:checked').length == 0 && $('#Unsubscribed:checked').length == 0) {
+        alert("Please check at least one subscription");
+        e.preventDefault();
+        }
+   
+  });    
+
+/* uncheck all options if unsubscribe all is clicked */
+  $('input#Unsubscribed').on('change', function() {
+    $('input.option').not(this).prop('checked', false);  
+    
+  });
+  /* uncheck the unsubscribe all checkbox if any subscription is checked */  
+  $('input.option').on('change', function() {
+    $('input#Unsubscribed').not(this).prop('checked', false);   
+
+  });
+/* reset button -not for production */
+  $('#resetBtn').click(function() {
+     $('input.option').prop('checked', false);  
+     $('input#Unsubscribed').prop('checked', false);  
+
+  });
+
+ /* select all subscription checkboxes if subscribe to all is checked */
+ $('#selectAll').click (function () {
+     var checkedStatus = this.checked;
+    $('.sublist-option').find('.option:checkbox').each(function () {
+        $(this).prop('checked', checkedStatus);
+     });
+  
+});
+
+
+ 
+  }); 
+  /* validate email on change */
+ function validatetheEmail(z) {
+ $('#emailError').removeClass('show').addClass('hide');
+ var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  if (!(re.test(z.value))) {
+   $('#emailError').removeClass('hide').addClass('show');
+    console.log("bad email");
+   z.focus();
+  }
+ } 
+  </script>
+  </head>
+
+  <body>
+<div class="container">
+<div class="top-navigation">
+ <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+   <td align="left" width="20%"><a href="https://www.enterprisecommunity.org"><img src="http://image.info.enterprisecommunity.org/lib/fe5a15707c6201787311/m/1/da2c56a6-42ef-455a-ac90-c3fbe8bba1d4.png?b=1519746675000" border="0" alt="Enterprise Community Partners" /></a></td>
+   <td align="right" width="80%" class="hide-mobile"><table border="0" width="500" cellpadding="0" cellspacing="0" align="right" class="align-left">
+     <tr>
+      <td class="top-nav-option"><a href="https://www.enterprisecommunity.org/about">About</a></td>
+      <td class="top-nav-option"><a href="https://donatenow.networkforgood.org/1443287?_ga=2.31055167.1697862436.1519741014-1912188104.1517241149">Donate</a></td>
+      <td class="top-nav-option"><a href="https://www.enterprisecommunity.org/invest">Invest</a></td>
+      <td class="top-nav-option"><a href="https://www.enterprisecommunity.org/news-and-events">News & Events</a></td>
+      <td class="top-nav-option"><a href="https://www.enterprisecommunity.org/careers">Careers</a></td>
+     </tr>
+    </table></td>
+  </tr>
+ </table>
+</div>
+<div class="pc-header">%%=v(@contactKey)=%% Your Subscriptions
+ <div style="padding-top:10px;font-size:18px;">Want to change anything? Modify your email preferences:</div>
+</div>
+%%[if @EmailOptOut == true then]%%
+<h2>Your email, %%=v(@customerEmail)=%% is currently unsubscribed from all publications, you can re-subscribe by adding subscriptions below.</h2>
+%%[else endif]%%
+<div style="font-size:20px; line-height: 20px;">&nbsp;</div>
+<form action="%%=cloudpagesURL(382)=%%" method="post" id="prefForm">
+ <fieldset>
+  <div class="subscription-list">
+   <div class="form-column float-left">
+    <div class="sublist-option">
+     <div class="section-header">LOCAL</div>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Chicago_News__c" id="Chicago_News__c" %%[if @Chicago_News__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Chicago News</span><br>
+        Stay up to date on our housing and community development work in Chicagoland and throughout the Midwest. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="News_from_Denver__c" id="News_from_Denver__c" %%[if @News_from_Denver__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">News from Denver</span><br>
+        Receive housing and transit-oriented development policy briefings, announcements for grants and events, and news from our partners throughout Colorado. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Mid_Atlantic_News__c" id="Mid_Atlantic_News__c" %%[if @Mid_Atlantic_News__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Mid-Atlantic News</span><br>
+        A monthly report about the latest progress on building and preserving green, affordable housing in the Mid-Atlantic area. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Northern_California__c" id="Northern_California__c" %%[if @Northern_California__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> </label>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Northern California News</span><br>
+        A bimonthly report about our work in transit-oriented development, green building, public housing and neighborhood revitalization in Northern California. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Ohio_Report__c" id="Ohio_Report__c" %%[if @Ohio_Report__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Ohio Report</span><br>
+        Stay up to date on our housing and community development work in Cleveland, Columbus and throughout the state of Ohio. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Pacific_Northwest__c" id="Pacific_Northwest__c" %%[if @Pacific_Northwest__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Pacific Northwest</span><br>
+        Quarterly updates on housing, policy, and solutions in Washington and Oregon including our Home & Hope, Health in Housing and transit-oriented development programs. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Southeast_News__c" id="Southeast_News__c" %%[if @Southeast_News__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Southeast News</span><br>
+        Periodic updates on the preservation of affordable housing and transit-oriented development in Alabama, Florida, Georgia, North Carolina, South Carolina and Tennessee. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Southern_California__c" id="Southern_California__c" %%[if @Southern_California__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Southern California News</span><br>
+        A monthly report about our work in affordable housing, community development, green building and partner sustainability in Southern California.</td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="New_York_News__c" id="New_York_News__c" %%[if @New_York_News__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">New York News</span><br>
+        Stay up to date on our housing and community development work in New York.</td>
+      </tr>
+     </table>
+    </div>
+   </div>
+   <div class="form-column float-left"> 
+    <!--<div class="sublist-option">
+     
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="eConnect__c" id="eConnect__c" %%[if @eConnect__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">eConnect</span><br>
+        A monthly round-up of news and events from Enterprise and its many partners nationwide. It's both crisp and chock full of news you can use. </td>
+      </tr>
+     </table>
+    </div>-->
+    <div class="sublist-option section-padding">
+     <div class="section-header">NATIONAL</div>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="MKTO_All_Enterprise_News__c" id="MKTO_All_Enterprise_News__c" %%[if @MKTO_All_Enterprise_News__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">National News</span><br>
+        Periodic notices of breaking news and announcements from the family of Enterprise initiatives. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option section-padding">
+     <div class="section-header">POLICY</div>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="MKTO_Capitol_Express__c" id="MKTO_Capitol_Express__c" %%[if @MKTO_Capitol_Express__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Capitol Express</span><br>
+        Issued twice a month, this is a summary of major congressional and regulatory activities affecting affordable housing and community development. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Community_Developments__c" id="Community_Developments__c" %%[if @Community_Developments__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Community Developments</span><br>
+        Subscribe to receive a daily roundup of news impacting housing and communities. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option section-padding">
+     <div class="section-header">TRAINING & RESOURCES</div>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Opportunity360__c" id="Opportunity360__c" %%[if @Opportunity360__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Opportunity360 Insights</span><br>
+        Monthly feature providing the latest tools, data, resources, and case studies on how to build opportunity with communities. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option">
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Live_Online_Events__c" id="Live_Online_Events__c" %%[if @Live_Online_Events__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> 
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Live Online Events</span><br>
+        Our webinars series cover programmatic, skill-building and thought-provoking topics about housing and community development. </td>
+      </tr>
+     </table>
+    </div>
+    <div class="sublist-option section-padding">
+     <div class="section-header">FINANCE</div>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td valign="top" ><label class="checkbox-label">&nbsp;
+         <input class="option" type="checkbox" name="Community_Returns__c" id="Community_Returns__c" %%[if @Community_Returns__c == true and @EmailOptOut != true then]%%checked%%[else endif]%%>
+         <span class="checkmark"></span> </label>
+        </label></td>
+       <td valign="top" class="option-cell"><span class="option-header">Community Returns</span><br>
+        A periodic report on the local return on investment created by Enterprise.</td>
+      </tr>
+     </table>
+    </div>
+   </div>
+  </div>
+  </div>
+  <div class="container">
+  <div class="form-input-box-email">
+   <input style="text-align: center;" type="text" readonly name="email_address" maxlength="254" id="emailInput" onchange="validatetheEmail(this);"  placeholder="Email Address *" %%[if @Email != '' then]%%value="%%=v(@Email)=%%"%%[else endif]%% />
+  </div>
+  <!--<table width="100%" cellpadding="0" cellspacing="0" border="0">
+   <tr>
+    <td bgcolor="#dde2e5" class="grey-container"><div style="font-size:12px; padding:0px 30px 0px 10px; text-align: right; font-weight: 300;">*required field</div>
+     <div class="form-column float-left">
+      <div class="form-input-box">
+       <label for="edit-first-name" >First Name</label>
+       <input type="text" name="first_name" maxlength="128" placeholder="First Name" %%[if @FirstName != '' then]%%value="%%=v(@FirstName)=%%"%%[else endif]%%/>
+      </div>
+      <div class="form-input-box">
+       <label for="edit-first-name" >Last Name</label>
+       <input type="text" name="last_name" maxlength="128" placeholder="Last Name" %%[if @LastName != '' then]%%value="%%=v(@LastName)=%%"%%[else endif]%% />
+      </div>
+      <div class="form-input-box">
+       <label for="edit-first-name" >Email Address</label>
+       <input type="text" name="email_address" maxlength="254" id="emailInput" onchange="validatetheEmail(this);"  placeholder="Email Address *" %%[if @Email != '' then]%%value="%%=v(@Email)=%%"%%[else endif]%% />
+      </div>
+      <div class="hide" id="emailError" style="color:#FF0004; font-weight: bold;">Please input a valid email address</div>
+     </div>
+     <div class="form-column float-left">
+      <div class="form-input-box">
+       <label for="edit-first-name" >Company Name</label>
+       <input type="text" name="company_name" maxlength="128" placeholder="Company Name" %%[if @Company != '' then]%%value="%%=v(@Company)=%%"%%[else endif]%%/>
+      </div>
+      <div class="form-input-box-half float-left group">
+       <label for="edit-first-name" >City </label>
+       <input type="text" name="city" maxlength="128" placeholder="City" %%[if @City != '' then]%%value="%%=v(@City)=%%"%%[else endif]%%/>
+      </div>
+      <div class="form-input-box-state float-left group">
+       <label for="edit-first-name" >State </label>
+       <select id="state" name="state">
+        <option value="" %%[if @State == '' then]%%selected%%[else endif]%%>State</option>
+        <option value="AL" %%[if @State == 'AL' then]%%selected%%[else endif]%%>Alabama</option>
+        <option value="AK" %%[if @State == 'AK' then]%%selected%%[else endif]%%>Alaska</option>
+        <option value="AZ" %%[if @State == 'AZ' then]%%selected%%[else endif]%%>Arizona</option>
+        <option value="AR" %%[if @State == 'AR' then]%%selected%%[else endif]%%>Arkansas</option>
+        <option value="CA" %%[if @State == 'CA' then]%%selected%%[else endif]%%>California</option>
+        <option value="CO" %%[if @State == 'CO' then]%%selected%%[else endif]%%>Colorado</option>
+        <option value="CT" %%[if @State == 'CT' then]%%selected%%[else endif]%%>Connecticut</option>
+        <option value="DE" %%[if @State == 'DE' then]%%selected%%[else endif]%%>Delaware</option>
+        <option value="FL" %%[if @State == 'FL' then]%%selected%%[else endif]%%>Florida</option>
+        <option value="GA" %%[if @State == 'GA' then]%%selected%%[else endif]%%>Georgia</option>
+        <option value="HI" %%[if @State == 'HI' then]%%selected%%[else endif]%%>Hawaii</option>
+        <option value="ID" %%[if @State == 'ID' then]%%selected%%[else endif]%%>Idaho</option>
+        <option value="IL" %%[if @State == 'IL' then]%%selected%%[else endif]%%>Illinois</option>
+        <option value="IN" %%[if @State == 'IN' then]%%selected%%[else endif]%%>Indiana</option>
+        <option value="IA" %%[if @State == 'IA' then]%%selected%%[else endif]%%>Iowa</option>
+        <option value="KS" %%[if @State == 'KS' then]%%selected%%[else endif]%%>Kansas</option>
+        <option value="KY" %%[if @State == 'KY' then]%%selected%%[else endif]%%>Kentucky</option>
+        <option value="LA" %%[if @State == 'LA' then]%%selected%%[else endif]%%>Louisiana</option>
+        <option value="ME" %%[if @State == 'ME' then]%%selected%%[else endif]%%>Maine</option>
+        <option value="MD" %%[if @State == 'MD' then]%%selected%%[else endif]%%>Maryland</option>
+        <option value="MA" %%[if @State == 'MA' then]%%selected%%[else endif]%%>Massachusetts</option>
+        <option value="MI" %%[if @State == 'MI' then]%%selected%%[else endif]%%>Michigan</option>
+        <option value="MN" %%[if @State == 'MN' then]%%selected%%[else endif]%%>Minnesota</option>
+        <option value="MS" %%[if @State == 'MS' then]%%selected%%[else endif]%%>Mississippi</option>
+        <option value="MO" %%[if @State == 'MO' then]%%selected%%[else endif]%%>Missouri</option>
+        <option value="MT" %%[if @State == 'MT' then]%%selected%%[else endif]%%>Montana</option>
+        <option value="NE" %%[if @State == 'NE' then]%%selected%%[else endif]%%>Nebraska</option>
+        <option value="NV" %%[if @State == 'NV' then]%%selected%%[else endif]%%>Nevada</option>
+        <option value="NH" %%[if @State == 'NH' then]%%selected%%[else endif]%%>New Hampshire</option>
+        <option value="NJ" %%[if @State == 'NJ' then]%%selected%%[else endif]%%>New Jersey</option>
+        <option value="NM" %%[if @State == 'NM' then]%%selected%%[else endif]%%>New Mexico</option>
+        <option value="NY" %%[if @State == 'NY' then]%%selected%%[else endif]%%>New York</option>
+        <option value="NC" %%[if @State == 'NC' then]%%selected%%[else endif]%%>North Carolina</option>
+        <option value="ND" %%[if @State == 'ND' then]%%selected%%[else endif]%%>North Dakota</option>
+        <option value="OH" %%[if @State == 'OH' then]%%selected%%[else endif]%%>Ohio</option>
+        <option value="OK" %%[if @State == 'OK' then]%%selected%%[else endif]%%>Oklahoma</option>
+        <option value="OR" %%[if @State == 'OR' then]%%selected%%[else endif]%%>Oregon</option>
+        <option value="PA" %%[if @State == 'PA' then]%%selected%%[else endif]%%>Pennsylvania</option>
+        <option value="RI" %%[if @State == 'RI' then]%%selected%%[else endif]%%>Rhode Island</option>
+        <option value="SC" %%[if @State == 'SC' then]%%selected%%[else endif]%%>South Carolina</option>
+        <option value="SD" %%[if @State == 'SD' then]%%selected%%[else endif]%%>South Dakota</option>
+        <option value="TN" %%[if @State == 'TN' then]%%selected%%[else endif]%%>Tennessee</option>
+        <option value="TX" %%[if @State == 'TX' then]%%selected%%[else endif]%%>Texas</option>
+        <option value="UT" %%[if @State == 'UT' then]%%selected%%[else endif]%%>Utah</option>
+        <option value="VT" %%[if @State == 'VT' then]%%selected%%[else endif]%%>Vermont</option>
+        <option value="VA" %%[if @State == 'VA' then]%%selected%%[else endif]%%>Virginia</option>
+        <option value="WA" %%[if @State == 'WA' then]%%selected%%[else endif]%%>Washington</option>
+        <option value="WV" %%[if @State == 'WV' then]%%selected%%[else endif]%%>West Virginia</option>
+        <option value="WI" %%[if @State == 'WI' then]%%selected%%[else endif]%%>Wisconsin</option>
+        <option value="WY" %%[if @State == 'WY' then]%%selected%%[else endif]%%>Wyoming</option>
+       </select>
+      </div>
+      <div class="form-input-box">
+       <label for="edit-first-name" >Phone</label>
+       <input type="text" name="phone" maxlength="128" placeholder="Phone" %%[if @Phone != '' then]%%value="%%=v(@Phone)=%%"%%[else endif]%% />
+      </div>
+     </div></td>
+   </tr>
+  </table>-->
+  <div class="sublist-option">
+   <div style="font-size:30px; line-height: 30px;">&nbsp;</div>
+   <table border="0" cellpadding="0" cellspacing="0" align="center">
+    <tr>
+     <td valign="top" ><label style="margin-right: 30px;">
+       <input type="checkbox" style="opacity:0;" id="Unsubscribed" name="Unsubscribed" %%[if @EmailOptOut == true then]%%checked%%[else endif]%%>
+       <span class="option-header" style="font-size: 14px !important; font-weight: 300 !important;">Unsubscribe from all</span></label></td>
+    </tr>
+   </table>
+  </div>
+  <div class="submit">
+   <input type="hidden" value="1" name="submit">
+   <input type="hidden" name="contactKey" value="%%=v(@contactKey)=%%">
+   <input type="hidden" name="customerEmail" value="%%=v(@Email)=%%">
+   <input type="hidden" name="recordType" value="%%=v(@recordType)=%%">
+   <input type="hidden" name="EmailOptOut" value="%%=v(@EmailOptOut)=%%">
+   <button class="submitinfo" type="submit">Update My Preferences</button>
+  </div>
+ </fieldset>
+</form>
+</div>
+</body>
+</html>
+%%[else
+redirect('https://www.enterprisecommunity.org/')
+endif
+]%%
